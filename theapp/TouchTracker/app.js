@@ -18,7 +18,7 @@ class TrackingSession {
             // Ignore if there are multiple touches on the screen
             return
         }
-    
+        activeTouch = {}
         const touch = touches.item(0)
         switch (event) {
             case "start":
@@ -41,7 +41,7 @@ class TrackingSession {
         }
     }
     
-    /* This method will use the *download* function defined below to export data in .json file format
+    // This method will use the *download* function defined below to export data in .json file format
     export() {
         const name = "TouchTracker Export"
         const output = {
@@ -53,20 +53,7 @@ class TrackingSession {
             screenScale: this.screenScale
         }
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
-    }*/
-}
-// This method will use the *download* function defined below to export data in .json file format
-function get() {
-    const name = "TouchTracker Export"
-    const output = {
-        name: name ,
-        startTime: session.records[0].timestamp,
-        duration: session.records[this.records.length-1].timestamp - this.records[0].timestamp,
-        records: session.records,
-        screenSize: session.screenSize,
-        screenScale: session.screenScale
     }
-    download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
 }
 
 // A TouchRecord class that we'll use as represention of the collected data. 
@@ -112,6 +99,7 @@ function download(data, filename, type) {
 
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
+let endEventCount = 0;
 
 /*
 This code adds an event listener to the touchstart event of the body element in an HTML document. 
@@ -145,9 +133,19 @@ document.body.addEventListener('touchend', function(e){
     e.preventDefault()
     console.log(e.changedTouches)
     session.handle("end", e.changedTouches)
+    endEventCount++
+    if (endEventCount === 5) {
+        session.exportData()
+        endEventCount = 0
+    }
 });
 document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
+    endEventCount++
+    if (endEventCount === 5) {
+        session.exportData()
+        endEventCount = 0
+    }
 });
 
