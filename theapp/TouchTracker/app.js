@@ -135,7 +135,7 @@ document.body.addEventListener('touchend', function(e){
     session.handle("end", e.changedTouches)
     endEventCount++
     if (endEventCount === 5) {
-        session.exportData()
+        session.export()
         endEventCount = 0
     }
 });
@@ -144,7 +144,7 @@ document.body.addEventListener('touchcancel', function(e){
     session.handle("end", e.changedTouches)
     endEventCount++
     if (endEventCount === 5) {
-        session.exportData()
+        session.export()
         endEventCount = 0
     }
 });
