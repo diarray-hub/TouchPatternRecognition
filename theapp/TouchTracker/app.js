@@ -110,7 +110,7 @@ document.body.addEventListener('touchstart', function(e){
     will prevent this from happening.
     */ 
     e.preventDefault()
-    session.handle("start", e.changedTouches)
+    session.handle("start", e.touches)
 });
 document.body.addEventListener('touchmove', function(e){
     e.preventDefault()
