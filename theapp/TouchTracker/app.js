@@ -14,15 +14,12 @@ class TrackingSession {
     ]
     // The handle method
     handle(event, touches) {
-        // This block ensures that the function will only execute if there is exactly one touch point on the screen
-        if (touches.length == 1) {
-            this.export()
-            activeTouch = {}
-            records = []
+        if (touches.length !== 1) {
+            // Ignore if there are multiple touches on the screen
             return
         }
+    
         const touch = touches.item(0)
-        // Chose a switch block to handle different type of event in occurrence start, move and end
         switch (event) {
             case "start":
                 const id = Math.floor(1e8 * Math.random()) + ""
@@ -30,14 +27,20 @@ class TrackingSession {
                 this.records.push(new TouchRecord(event, touch, id))
                 break
             case "move":
-                this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
+                if (this.activeTouch[touch.identifier]) {
+                    this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
+                }
                 break
             case "end":
-                this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
-                delete this.activeTouch[touch.identifier]
+                if (this.activeTouch[touch.identifier]) {
+                    this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
+                    delete this.activeTouch[touch.identifier]
+                    this.export()
+                }
                 break
         }
     }
+    
     // This method will use the *download* function defined below to export data in .json file format
     export() {
         const name = "TouchTracker Export"
