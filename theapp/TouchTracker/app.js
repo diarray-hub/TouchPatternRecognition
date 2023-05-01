@@ -55,6 +55,19 @@ class TrackingSession {
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
     }*/
 }
+// This method will use the *download* function defined below to export data in .json file format
+function get() {
+    const name = "TouchTracker Export"
+    const output = {
+        name: name ,
+        startTime: session.records[0].timestamp,
+        duration: session.records[this.records.length-1].timestamp - this.records[0].timestamp,
+        records: session.records,
+        screenSize: session.screenSize,
+        screenScale: session.screenScale
+    }
+    download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
+}
 
 // A TouchRecord class that we'll use as represention of the collected data. 
 // This class' structure represent how data will look like in the .json file
@@ -76,19 +89,6 @@ class TouchRecord {
         this.force = touch.force
         this.timestamp = new Date().getTime() / 1000
     }
-}
-// This method will use the *download* function defined below to export data in .json file format
-function get_data() {
-    const name = "TouchTracker Export"
-    const output = {
-        name: name ,
-        startTime: session.records[0].timestamp,
-        duration: session.records[this.records.length-1].timestamp - this.records[0].timestamp,
-        records: session.records,
-        screenSize: session.screenSize,
-        screenScale: session.screenScale
-    }
-    download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
 }
 
 // Defining a function that will allows us to export collected data in .json file from the browser
