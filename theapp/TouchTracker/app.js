@@ -22,7 +22,7 @@ class TrackingSession {
         const touch = touches.item(0)
         switch (event) {
             case "start":
-                const id = ids++ + ""
+                const id = ++this.ids + ""
                 this.activeTouch[touch.identifier] = id
                 this.records.push(new TouchRecord(event, touch, id))
                 break
