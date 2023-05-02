@@ -41,9 +41,6 @@ class TrackingSession {
         if(this.endcounter === 5){
             this.export()
             this.endcounter = 0
-            activeTouch = {}
-            records = []
-            return
         }
     }
     
