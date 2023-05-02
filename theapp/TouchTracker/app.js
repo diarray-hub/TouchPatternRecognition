@@ -11,12 +11,11 @@ class TrackingSession {
         screen.width,
         screen.height
     ]
+    endcounter = 0
     // The handle method
     handle(event, touches) {
         if (touches.length !== 1) {
             // Ignore if there are multiple touches on the screen
-            activeTouch = {}
-            records = []
             return
         }
         const touch = touches.item(0)
@@ -35,9 +34,13 @@ class TrackingSession {
                 if (this.activeTouch[touch.identifier]) {
                     this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
                     delete this.activeTouch[touch.identifier]
-                    this.export()
+                    this.endcounter++
                 }
                 break
+        }
+        if(this.endcounter === 5){
+            this.export()
+            this.endcounter = 0
         }
     }
     
