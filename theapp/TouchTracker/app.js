@@ -41,12 +41,14 @@ class TrackingSession {
         if(this.endcounter === 5){
             this.export()
             this.endcounter = 0
+            this.activeTouch = {}
+            this.records = []
         }
     }
     
     // This method will use the *download* function defined below to export data in .json file format
     export() {
-        const name = "TouchTracker Export"
+        const name = "TouchTracker_Export"
         const output = {
             name: name ,
             startTime: this.records[0].timestamp,
@@ -65,7 +67,6 @@ class TouchRecord {
     touchId
     event
     position
-    force
     timestamp
 
     constructor(event, touch, id) {
@@ -76,7 +77,6 @@ class TouchRecord {
             touch.screenX,
             touch.screenY + topOffset
         ]
-        this.force = touch.force
         this.timestamp = new Date().getTime() / 1000
     }
 }
@@ -102,8 +102,6 @@ function download(data, filename, type) {
 
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
-
-let clickCount = 0
 
 document.body.addEventListener('touchstart', function(e){
     /*
