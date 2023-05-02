@@ -5,7 +5,7 @@ class TrackingSession {
     activeTouch = {}
     // To store all the records
     records = []
-    
+    endEventCount = 0
     // Our app are not going to use the whole screen. This will set the app screen dimensions
     screenScale = window.devicePixelRatio
     screenSize = [
@@ -18,7 +18,6 @@ class TrackingSession {
             // Ignore if there are multiple touches on the screen
             return
         }
-        activeTouch = {}
         const touch = touches.item(0)
         switch (event) {
             case "start":
@@ -35,6 +34,11 @@ class TrackingSession {
                 if (this.activeTouch[touch.identifier]) {
                     this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
                     delete this.activeTouch[touch.identifier]
+                    this.endEventCount++
+                    if (endEventCount === 5) {
+                        this.export()
+                        endEventCount = 0
+                    }
                     //this.export()
                 }
                 break
@@ -99,16 +103,13 @@ function download(data, filename, type) {
 
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
-let endEventCount = 0;
 
-/*
-This code adds an event listener to the touchstart event of the body element in an HTML document. 
-The function that is passed as the second argument to addEventListener will be executed whenever the touchstart event is fired on the body element.
-*touchstart*, *touchmove* and *touchend* are  built-in JavaScript events that is triggered when a user touches the screen with their finger or stylus. 
-It is specifically designed for touchscreens and is not triggered by mouse clicks or other input methods.
-*/
 document.body.addEventListener('touchstart', function(e){
     /*
+    This code adds an event listener to the touchstart event of the body element in an HTML document. 
+    The function that is passed as the second argument to addEventListener will be executed whenever the touchstart event is fired on the body element.
+    *touchstart*, *touchmove* and *touchend* are  built-in JavaScript events that is triggered when a user touches the screen with their finger or stylus. 
+    It is specifically designed for touchscreens and is not triggered by mouse clicks or other input methods.
     The preventDefault() function is called to prevent the default action associated with the touchstart event from occurring. 
     In this case, the default action is to scroll the page when the user touches the screen, and calling preventDefault() 
     will prevent this from happening.
@@ -133,19 +134,8 @@ document.body.addEventListener('touchend', function(e){
     e.preventDefault()
     console.log(e.changedTouches)
     session.handle("end", e.changedTouches)
-    endEventCount++
-    if (endEventCount === 5) {
-        session.export()
-        endEventCount = 0
-    }
 });
 document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
-    endEventCount++
-    if (endEventCount === 5) {
-        session.export()
-        endEventCount = 0
-    }
 });
-
