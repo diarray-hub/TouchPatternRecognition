@@ -16,7 +16,7 @@ class TrackingSession {
     handle(event, touches) {
         if (touches.length !== 1) {
             // Ignore if there are multiple touches on the screen
-            return
+            throw
         }
         const touch = touches.item(0)
         switch (event) {
@@ -43,6 +43,7 @@ class TrackingSession {
             this.endcounter = 0
             activeTouch = {}
             records = []
+            return
         }
     }
     
