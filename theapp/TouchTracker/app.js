@@ -5,7 +5,6 @@ class TrackingSession {
     activeTouch = {}
     // To store all the records
     records = []
-    endEventCount = 0
     // Our app are not going to use the whole screen. This will set the app screen dimensions
     screenScale = window.devicePixelRatio
     screenSize = [
@@ -34,12 +33,7 @@ class TrackingSession {
                 if (this.activeTouch[touch.identifier]) {
                     this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
                     delete this.activeTouch[touch.identifier]
-                    /*this.endEventCount++
-                    if (endEventCount === 5) {
-                        this.export()
-                        endEventCount = 0
-                    }*/
-                    this.export()
+                    // this.export()
                 }
                 break
         }
@@ -104,6 +98,8 @@ function download(data, filename, type) {
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
 
+let clickCount = 0
+
 document.body.addEventListener('touchstart', function(e){
     /*
     This code adds an event listener to the touchstart event of the body element in an HTML document. 
@@ -117,6 +113,7 @@ document.body.addEventListener('touchstart', function(e){
     e.preventDefault()
     session.handle("start", e.touches)
 });
+
 document.body.addEventListener('touchmove', function(e){
     e.preventDefault()
     
@@ -135,7 +132,16 @@ document.body.addEventListener('touchend', function(e){
     console.log(e.changedTouches)
     session.handle("end", e.changedTouches)
 });
+
 document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
 });
+
+document.body.addEventListener('click', function(e) {
+    clickCount++
+    if (clickCount === 3) {
+      clickCount = 0
+      session.export()
+    }
+  })
