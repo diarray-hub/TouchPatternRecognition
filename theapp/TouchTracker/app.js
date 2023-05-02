@@ -34,12 +34,12 @@ class TrackingSession {
                 if (this.activeTouch[touch.identifier]) {
                     this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
                     delete this.activeTouch[touch.identifier]
-                    this.endEventCount++
+                    /*this.endEventCount++
                     if (endEventCount === 5) {
                         this.export()
                         endEventCount = 0
-                    }
-                    //this.export()
+                    }*/
+                    this.export()
                 }
                 break
         }
