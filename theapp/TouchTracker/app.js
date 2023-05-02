@@ -12,7 +12,6 @@ class TrackingSession {
         screen.height
     ]
     endcounter = 0
-    ids = 0
     // The handle method
     handle(event, touches) {
         if (touches.length !== 1) {
@@ -22,7 +21,7 @@ class TrackingSession {
         const touch = touches.item(0)
         switch (event) {
             case "start":
-                const id = ++this.ids + ""
+                const id = Math.floor(1e8 * Math.random()) + ""
                 this.activeTouch[touch.identifier] = id
                 this.records.push(new TouchRecord(event, touch, id))
                 break
