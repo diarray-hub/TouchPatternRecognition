@@ -132,16 +132,9 @@ document.body.addEventListener('touchend', function(e){
     console.log(e.changedTouches)
     session.handle("end", e.changedTouches)
 });
+session.export()
 
 document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
 });
-
-document.body.addEventListener('click', function(e) {
-    clickCount++
-    if (clickCount === 3) {
-      clickCount = 0
-      session.export()
-    }
-  })
