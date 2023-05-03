@@ -1,7 +1,9 @@
-// This TrackingSession offers us a general way to collect data from the screen through the app
-// The most important method there is the *handle* method through which we collect data like position and timestamp
 class TrackingSession {
-    // To keep track of the ative touch
+    /*
+    This TrackingSession offers us a general way to collect data from the screen through the app
+    The most important method there is the *handle* method through which we collect data like position and timestamp
+    */
+    // To track the active touch
     activeTouch = {}
     // To store all the records
     records = []
@@ -48,7 +50,7 @@ class TrackingSession {
     export() {
         const name = "TouchTracker_Export";
         const touchTrackings = {};
-        //let currentTouchId;
+        let currentTouchId;
         let currentTouchTimestamp;
         let currentPosition;
         let lastPosition;
@@ -58,7 +60,7 @@ class TrackingSession {
         // Process the touch records to create touch tracking objects
         this.records.forEach(record => {
             if (record.event === "start") {
-                const currentTouchId = record.touchId;
+                currentTouchId = record.touchId;
                 currentTouchTimestamp = record.timestamp;
                 currentPosition = record.position;
                 touchTrackings[currentTouchId] = {id: currentTouchId, positions: [currentPosition], 
@@ -73,6 +75,14 @@ class TrackingSession {
                 touchTrackings[currentTouchId].speeds.push(currentSpeed);
                 touchTrackings[currentTouchId].directions.push(currentDirection);
             } else if (record.event === "end") {
+                lastPosition = currentPosition;
+                currentPosition = record.position;
+                currentSpeed = calculateSpeed(currentPosition, lastPosition, record.timestamp, currentTouchTimestamp);
+                currentTouchTimestamp = record.timestamp;
+                currentDirection = calculateDirection(currentPosition, lastPosition);
+                touchTrackings[currentTouchId].positions.push(currentPosition);
+                touchTrackings[currentTouchId].speeds.push(currentSpeed);
+                touchTrackings[currentTouchId].directions.push(currentDirection);
                 touchTrackings[currentTouchId].endTimestamp = record.timestamp;
             }
         });
@@ -92,36 +102,29 @@ class TrackingSession {
     
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
     
-        function calculateSpeed(currentPosition, lastPosition, timestamp) {
+        function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
             const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
-            const timeElapsed = timestamp - currentTouchTimestamp;
-            return distance / timeElapsed;
+            const timeElapsed = timestamp - lastimestamp;
+            return distance / timeElapsed; // Eucludian speed calculus
         }
     
         function calculateDirection(currentPosition, lastPosition) {
+            /*
+            Note that the angle returned by Math.atan2 is not the same as the direction in degrees (i.e. north, south, east, west). Instead, 
+            it represents the angle between the two points in the coordinate system, with the positive x-axis as the reference.
+            */
             const deltaX = currentPosition[0] - lastPosition[0];
             const deltaY = currentPosition[1] - lastPosition[1];
             return Math.atan2(deltaY, deltaX);
         }
     }
-    
-    /*export() {
-        const name = "TouchTracker_Export"
-        const output = {
-            name: name ,
-            startTime: this.records[0].timestamp,
-            duration: this.records[this.records.length-1].timestamp - this.records[0].timestamp,
-            records: this.records,
-            screenSize: this.screenSize,
-            screenScale: this.screenScale
-        }
-        download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
-    }*/
 }
 
-// A TouchRecord class that we'll use as represention of the collected data. 
-// This class' structure represent how data will look like in the .json file
 class TouchRecord {
+    /*
+    A TouchRecord class that we'll use as represention of the collected data. 
+    This class' structure represent how data will look like in the .json file
+    */
     touchId
     event
     position
@@ -161,33 +164,31 @@ function download(data, filename, type) {
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
 
-document.body.addEventListener('touchstart', function(e){
-    /*
-    This code adds an event listener to the touchstart event of the body element in an HTML document. 
+/*
+    This code adds an event listener to the touch events of the body element in an HTML document. 
     The function that is passed as the second argument to addEventListener will be executed whenever the touchstart event is fired on the body element.
     *touchstart*, *touchmove* and *touchend* are  built-in JavaScript events that is triggered when a user touches the screen with their finger or stylus. 
     It is specifically designed for touchscreens and is not triggered by mouse clicks or other input methods.
     The preventDefault() function is called to prevent the default action associated with the touchstart event from occurring. 
     In this case, the default action is to scroll the page when the user touches the screen, and calling preventDefault() 
     will prevent this from happening.
-    */ 
+    The e.changedTouches property in the code represents an array of touch points that have changed since the last event. 
+    This can include touches that have been added, moved, or removed from the screen.
+    When the passive option is set to false, it indicates that the event listener will call preventDefault() on the event object, 
+    which will prevent the default behavior of the touchmove event from occurring. 
+    Note that setting passive to false can potentially cause performance issues on mobile devices, 
+    so it is generally recommended to use this option only when necessary.
+*/ 
+document.body.addEventListener('touchstart', function(e){
     e.preventDefault()
     session.handle("start", e.touches)
 });
 
 document.body.addEventListener('touchmove', function(e){
     e.preventDefault()
-    
-    //The e.changedTouches property in the code represents an array of touch points that have changed since the last event. 
-    //This can include touches that have been added, moved, or removed from the screen.
     session.handle("move", e.changedTouches)
 }, { passive: false });
-/*
-    When the passive option is set to false, it indicates that the event listener will call preventDefault() on the event object, 
-    which will prevent the default behavior of the touchmove event from occurring. 
-    Note that setting passive to false can potentially cause performance issues on mobile devices, 
-    so it is generally recommended to use this option only when necessary.
-*/
+
 document.body.addEventListener('touchend', function(e){
     e.preventDefault()
     console.log(e.changedTouches)
