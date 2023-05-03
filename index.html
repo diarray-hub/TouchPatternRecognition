@@ -53,65 +53,9 @@
                         padding-bottom: min(0vmin, env(safe-area-inset-bottom));
                 }
             }
-
-        h1 {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 30px;
-            color: #333333;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            width: 90%;
-            max-width: 600px;
-            height: 90%;
-            max-height: 600px;
-            border: 1px solid #111010;
-            padding: 20px;
-            flex-direction: row;
-        }
-
-        .point {
-            position: relative;
-            width: calc(14.28% - 15px);
-            height: calc(14.28% - 15px);
-            margin: 5px;
-            background-color: #fffefe;
-            border: 3px solid #292929;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .point:active {
-            transform: scale(0.9);
-        }
-
-        .point:before,
-        .point:after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            background-color: #eceaea;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .point:before {
-            transform: translate(-10px, -50%);
-        }
-
-        .point:after {
-            transform: translate(10px, -50%);
-        }
+            canvas {
+                border: 1px solid black;
+            }
         </style>
     </head>
     <body>
@@ -119,25 +63,40 @@
         <span id="br">✕</span>
         <span id="bl">✕</span>
         <span id="tl">✕</span>
-        <h1>Relier 5 points avec un seul trait</h1>
-        <div class="container">
-            <button id="btn1" class="point"></button>
-            <button id="btn2" class="point"></button>
-            <button id="btn3" class="point"></button>
-            <button id="btn4" class="point"></button>
-            <button id="btn5" class="point"></button>
-            <button id="btn6" class="point"></button>
-            <button id="btn7" class="point"></button>
-            <button id="btn8" class="point"></button>
-            <button id="btn9" class="point"></button>
-            <button id="btn10" class="point"></button>
-            <button id="btn11" class="point"></button>
-            <button id="btn12" class="point"></button>
-            <button id="btn13" class="point"></button>
-            <button id="btn14" class="point"></button>
-            <button id="btn15" class="point"></button>
-            <button id="btn16" class="point"></button>
-        </div>
+        <canvas id="myCanvas" width="300" height="300"></canvas>
+        <script>
+        const canvas = document.getElementById('myCanvas');
+        const context = canvas.getContext('2d');
+
+        // Set the radius of the dots
+        const radius = 3;
+
+        // Define the positions of the dots
+        const positions = [
+            {x: 50, y: 50},
+            {x: 100, y: 100},
+            {x: 150, y: 150},
+            {x: 200, y: 200},
+            {x: 250, y: 250}
+        ];
+
+        // Draw the dots
+        context.fillStyle = 'black';
+        positions.forEach(position => {
+            context.beginPath();
+            context.arc(position.x, position.y, radius, 0, 2 * Math.PI);
+            context.fill();
+        });
+
+        // Draw lines between the dots
+        context.beginPath();
+        context.strokeStyle = 'black';
+        context.moveTo(positions[0].x, positions[0].y);
+        positions.slice(1).forEach(position => {
+            context.lineTo(position.x, position.y);
+        });
+        context.stroke();
+        </script>
     </body>
     <script src="./theapp/TouchTracker/app.js"></script>
 </html>
