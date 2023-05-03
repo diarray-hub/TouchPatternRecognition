@@ -46,6 +46,66 @@ class TrackingSession {
     
     // This method will use the *download* function defined below to export data in .json file format
     export() {
+        const name = "TouchTracker_Export";
+        const touchTrackings = {};
+        //let currentTouchId;
+        let currentTouchTimestamp;
+        let currentPosition;
+        let lastPosition;
+        let currentSpeed;
+        let currentDirection;
+    
+        // Process the touch records to create touch tracking objects
+        this.records.forEach(record => {
+            if (record.event === "start") {
+                const currentTouchId = record.touchId;
+                currentTouchTimestamp = record.timestamp;
+                currentPosition = record.position;
+                touchTrackings[currentTouchId] = {id: currentTouchId, positions: [currentPosition], 
+                    speeds: [], directions: [], startTimestamp: currentTouchTimestamp};
+            } else if (record.event === "move") {
+                lastPosition = currentPosition;
+                currentPosition = record.position;
+                currentSpeed = calculateSpeed(currentPosition, lastPosition, record.timestamp);
+                currentTouchTimestamp = record.timestamp;
+                currentDirection = calculateDirection(currentPosition, lastPosition);
+                touchTrackings[currentTouchId].positions.push(currentPosition);
+                touchTrackings[currentTouchId].speeds.push(currentSpeed);
+                touchTrackings[currentTouchId].directions.push(currentDirection);
+            } else if (record.event === "end") {
+                touchTrackings[currentTouchId].endTimestamp = record.timestamp;
+            }
+        });
+    
+        // Create an array of touch tracking objects
+        const touchTrackingsArray = Object.values(touchTrackings);
+    
+        // Generate the output object
+        const output = {
+            name: name,
+            startTime: touchTrackingsArray[0].startTimestamp,
+            duration: touchTrackingsArray[0].endTimestamp - touchTrackingsArray[0].startTimestamp,
+            touchTrackings: touchTrackingsArray,
+            screenSize: this.screenSize,
+            screenScale: this.screenScale
+        };
+    
+        download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
+    
+        function calculateSpeed(currentPosition, lastPosition, timestamp) {
+            const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
+            const timeElapsed = timestamp - currentTouchTimestamp;
+            return distance / timeElapsed;
+        }
+    
+        function calculateDirection(currentPosition, lastPosition) {
+            const deltaX = currentPosition[0] - lastPosition[0];
+            const deltaY = currentPosition[1] - lastPosition[1];
+            return Math.atan2(deltaY, deltaX);
+        }
+    }
+    
+    /*export() {
         const name = "TouchTracker_Export"
         const output = {
             name: name ,
@@ -56,7 +116,7 @@ class TrackingSession {
             screenScale: this.screenScale
         }
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json")
-    }
+    }*/
 }
 
 // A TouchRecord class that we'll use as represention of the collected data. 
