@@ -65,7 +65,7 @@
         <span id="br">✕</span>
         <span id="bl">✕</span>
         <span id="tl">✕</span>
-        <canvas id="myCanvas" width="350" height="500"></canvas>
+        <canvas id="myCanvas" width="350" height="350"></canvas>
         <script>
             const canvas = document.querySelector('canvas');
             const ctx = canvas.getContext('2d');
@@ -73,7 +73,7 @@
             const dotSize = 8; // change this to adjust dot size
             const spacing = 20; // change this to adjust spacing between dots
             
-            const xStart = (canvas.width - (dotSize * 7 + spacing * 6)) / 2 - 20; // center horizontally
+            const xStart = (canvas.width - (dotSize * 7 + spacing * 6)) / 2; // center horizontally
             const yStart = (canvas.height - (dotSize * 7 + spacing * 6)) / 2 - 20; // center vertically
             
             for (let i = 0; i < 7; i++) {
