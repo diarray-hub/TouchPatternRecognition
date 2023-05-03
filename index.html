@@ -73,14 +73,14 @@
             const canvas = document.querySelector('canvas');
             const ctx = canvas.getContext('2d');
             
-            const dotSize = 4; // change this to adjust dot size
-            const spacing = 40; // change this to adjust spacing between dots
+            const dotSize = 5; // change this to adjust dot size
+            const spacing = 50; // change this to adjust spacing between dots
             
             const xStart = (canvas.width - (dotSize * 7 + spacing * 6)) / 2 - 5; // center horizontally
             const yStart = (canvas.height - (dotSize * 7 + spacing * 6)) / 2; // center vertically
             
-            for (let i = 0; i < 7; i++) {
-              for (let j = 0; j < 7; j++) {
+            for (let i = 0; i < 6; i++) {
+              for (let j = 0; j < 6; j++) {
                 const x = xStart + i * (dotSize + spacing);
                 const y = yStart + j * (dotSize + spacing);
                 ctx.beginPath();
