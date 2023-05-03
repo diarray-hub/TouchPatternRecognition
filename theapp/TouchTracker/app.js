@@ -68,7 +68,7 @@ class TrackingSession {
             } else if (record.event === "move") {
                 lastPosition = currentPosition;
                 currentPosition = record.position;
-                currentSpeed = calculateSpeed(currentPosition, lastPosition, record.timestamp);
+                currentSpeed = calculateSpeed(currentPosition, lastPosition, record.timestamp, currentTouchTimestamp);
                 currentTouchTimestamp = record.timestamp;
                 currentDirection = calculateDirection(currentPosition, lastPosition);
                 touchTrackings[currentTouchId].positions.push(currentPosition);
@@ -111,7 +111,8 @@ class TrackingSession {
         function calculateDirection(currentPosition, lastPosition) {
             /*
             Note that the angle returned by Math.atan2 is not the same as the direction in degrees (i.e. north, south, east, west). Instead, 
-            it represents the angle between the two points in the coordinate system, with the positive x-axis as the reference.
+            .
+            +it represents the angle between the two points in the coordinate system, with the positive x-axis as the reference.
             */
             const deltaX = currentPosition[0] - lastPosition[0];
             const deltaY = currentPosition[1] - lastPosition[1];
