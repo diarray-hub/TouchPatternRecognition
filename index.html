@@ -55,6 +55,8 @@
             }
             canvas {
                 border: 1px solid black;
+                display: block;
+                margin: 0 auto;
             }
         </style>
     </head>
@@ -63,39 +65,63 @@
         <span id="br">✕</span>
         <span id="bl">✕</span>
         <span id="tl">✕</span>
-        <canvas id="myCanvas" width="300" height="300"></canvas>
+        <canvas id="myCanvas" width="700" height="700"></canvas>
         <script>
-        const canvas = document.getElementById('myCanvas');
-        const context = canvas.getContext('2d');
+            const canvas = document.querySelector('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const dotSize = 8; // change this to adjust dot size
+            const spacing = 20; // change this to adjust spacing between dots
+            
+            const xStart = (canvas.width - (dotSize * 7 + spacing * 6)) / 2; // center horizontally
+            const yStart = (canvas.height - (dotSize * 7 + spacing * 6)) / 2; // center vertically
+            
+            for (let i = 0; i < 7; i++) {
+              for (let j = 0; j < 7; j++) {
+                const x = xStart + i * (dotSize + spacing);
+                const y = yStart + j * (dotSize + spacing);
+                ctx.beginPath();
+                ctx.arc(x, y, dotSize, 0, 2 * Math.PI);
+                ctx.fill();
+              }
+            }
+            let prevDot = null;
 
-        // Set the radius of the dots
-        const radius = 3;
+            canvas.addEventListener('mousedown', handleTouchStart);
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
 
-        // Define the positions of the dots
-        const positions = [
-            {x: 50, y: 50},
-            {x: 100, y: 100},
-            {x: 150, y: 150},
-            {x: 200, y: 200},
-            {x: 250, y: 250}
-        ];
+            function handleTouchStart(e) {
+            e.preventDefault(); // prevent scrolling on touch devices
+            const dot = getDotAtCoords(e.clientX, e.clientY);
+            if (dot) {
+                if (prevDot) {
+                drawLine(prevDot, dot);
+                }
+                prevDot = dot;
+            }
+            }
 
-        // Draw the dots
-        context.fillStyle = 'black';
-        positions.forEach(position => {
-            context.beginPath();
-            context.arc(position.x, position.y, radius, 0, 2 * Math.PI);
-            context.fill();
-        });
+            function getDotAtCoords(x, y) {
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 7; j++) {
+                const dotX = xStart + i * (dotSize + spacing);
+                const dotY = yStart + j * (dotSize + spacing);
+                const dx = x - dotX;
+                const dy = y - dotY;
+                if (dx * dx + dy * dy < dotSize * dotSize) {
+                    return { x: dotX, y: dotY };
+                }
+                }
+            }
+            return null;
+            }
 
-        // Draw lines between the dots
-        context.beginPath();
-        context.strokeStyle = 'black';
-        context.moveTo(positions[0].x, positions[0].y);
-        positions.slice(1).forEach(position => {
-            context.lineTo(position.x, position.y);
-        });
-        context.stroke();
+            function drawLine(start, end) {
+            ctx.beginPath();
+            ctx.moveTo(start.x, start.y);
+            ctx.lineTo(end.x, end.y);
+            ctx.stroke();
+            }  
         </script>
     </body>
     <script src="./theapp/TouchTracker/app.js"></script>
