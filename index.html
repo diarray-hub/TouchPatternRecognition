@@ -88,6 +88,7 @@
                 ctx.fill();
               }
             }
+            
             let prevDot = null;
 
             canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -104,8 +105,8 @@
             }
 
             function getDotAtCoords(x, y) {
-            for (let i = 0; i < 7; i++) {
-                for (let j = 0; j < 7; j++) {
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 6; j++) {
                 const dotX = xStart + i * (dotSize + spacing);
                 const dotY = yStart + j * (dotSize + spacing);
                 const dx = x - dotX;
