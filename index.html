@@ -95,7 +95,7 @@
 
             function handleTouchStart(e) {
             e.preventDefault(); // prevent scrolling on touch devices
-            const dot = getDotAtCoords(e.clientX, e.clientY);
+            const dot = getDotAtCoords(e.touches[0].clientX, e.touches[0].clientY);
             if (dot) {
                 if (prevDot) {
                 drawLine(prevDot, dot);
