@@ -163,18 +163,17 @@
         var x=dot.getBoundingClientRect().left,
         y=dot.getBoundingClientRect().top;
         inputData+=dot.innerText;
-        startDot = dot; // update startDot to the last touched dot
         makeLineWhileMoving(x,y)
         lineData+=tempLineData;
     }     
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
+            val.addEventListener("touchstart",TouchStart(val));
         })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
+            val.removeEventListener("touchstart",TouchStart(val));
         })
     }
     function updateLine(){
