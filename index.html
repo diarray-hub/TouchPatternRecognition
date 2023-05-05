@@ -163,7 +163,7 @@
         var x=dot.getBoundingClientRect().left,
         y=dot.getBoundingClientRect().top;
         inputData+=dot.innerText;
-    
+        startDot = dot; // update startDot to the last touched dot
         makeLineWhileMoving(x,y)
         lineData+=tempLineData;
     }     
