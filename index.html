@@ -84,7 +84,7 @@
         font-style: italic;
         position: absolute;
         text-align: center;
-        top: 100px;
+        top: 110px;
     }
   </style>
 </head>
@@ -112,11 +112,10 @@
     lineData="M",
     tempLineData,
     svgPath=op('svg path'),
-    inputData="",
-    correctData="2413";
+    inputData="";
 
     function end(){
-        document.body.style.setProperty('--baseCol',(inputData==correctData)?"#0f0":"#f00");
+        document.body.style.setProperty('--baseCol',(inputData.length === 5)?"#0f0":"#f00");
 
         startDot=undefined;
         lineData="M";
@@ -170,12 +169,12 @@
     }     
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
+            val.addEventListener("touchmove",makeLine);
         })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
+            val.removeEventListener("touchmove",makeLine);
         })
     }
     function updateLine(){
