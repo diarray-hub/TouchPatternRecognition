@@ -84,7 +84,7 @@
         font-style: italic;
         position: absolute;
         text-align: center;
-        top: 110px;
+        top: 80px;
     }
   </style>
 </head>
@@ -129,12 +129,12 @@
         },500)
     }
 
-    function TouchStart(elem){
+    function TouchStart(elem, event){
         startDot=elem;
         document.addEventListener('touchmove', moving);
         addEvToMouseEnter();
         lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine();
+        makeLine(event);
         startDot.classList.add("active")
     }
     document.ontouchend=function (){
@@ -156,8 +156,8 @@
         updateLine()
     }
 
-    function makeLine(e=startDot){
-        e.target=startDot;
+    function makeLine(e){
+        e.preventDefault();
         var dot=e.target.parentElement;
         dot.classList.add('active');
         var x=dot.getBoundingClientRect().left,
@@ -169,12 +169,14 @@
     }     
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchmove",makeLine);
+            val.addEventListener("touchstart",makeLine);
         })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchmove",makeLine);
+            val.removeEventListener("touchstart",function(e){
+                TouchStart(this, e);
+            });
         })
     }
     function updateLine(){
