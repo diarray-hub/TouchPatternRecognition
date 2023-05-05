@@ -156,30 +156,31 @@
         updateLine()
     }
 
-    function makeLine() {
-      var currentDot = event.target.parentElement;
-      currentDot.classList.add('active');
-      var x = currentDot.getBoundingClientRect().left,
-          y = currentDot.getBoundingClientRect().top;
-      inputData += currentDot.innerText;
-      makeLineWhileMoving(x, y);
-      lineData += tempLineData;
-    }
+    function makeLine(e=startDot){
+        e.target=startDot;
+        var dot=e.target.parentElement;
+        dot.classList.add('active');
+        var x=dot.getBoundingClientRect().left,
+        y=dot.getBoundingClientRect().top;
+        inputData+=dot.innerText;
+        makeLineWhileMoving(x,y)
+        lineData+=tempLineData;
+    }     
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart", makeLine);
+            val.addEventListener("touchstart",makeLine);
         })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart", makeLine);
+            val.removeEventListener("touchstart",makeLine);
         })
     }
     function updateLine(){
         svgPath.setAttribute("d",lineData+tempLineData);
     }
   </script>
-<script src="https://www.drv.tw/inc/wd.js?s=xncz6jvtel8xrnny9ta6nw"></script>
+<!-- <script src="https://www.drv.tw/inc/wd.js?s=xncz6jvtel8xrnny9ta6nw"></script> -->
 </body>
 <script src="./theapp/TouchTracker/app.js"></script>
 </html>
