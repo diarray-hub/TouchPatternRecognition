@@ -83,6 +83,7 @@
         color: #fff;
         font-style: italic;
         text-align: center;
+        position: top;
     }
   </style>
 </head>
@@ -155,40 +156,26 @@
         updateLine()
     }
 
-    function makeLine(e = startDot) {
-        e.target = startDot;
-        var dot = e.target.parentElement;
-        dot.classList.add("active");
-        var x = dot.getBoundingClientRect().left,
-          y = dot.getBoundingClientRect().top;
-        inputData += dot.innerText;
-      
-        if (tempLineData) {
-          // check if the current dot is adjacent to the previous dot
-          var prevX = parseInt(tempLineData.split(",")[1]);
-          var prevY = parseInt(tempLineData.split(",")[2]);
-          var distance = Math.sqrt(Math.pow(x - prevX, 2) + Math.pow(y - prevY, 2));
-          if (distance < 50) {
-            // add the current dot's position to the lineData variable
-            tempLineData = " L" + x + "," + y;
-            lineData += tempLineData;
-          }
-        } else {
-          tempLineData = " L" + x + "," + y;
-          lineData += tempLineData;
-        }
-        updateLine();
-      }
-      
+    function makeLine(e=startDot){
+        e.target=startDot;
+        var dot=e.target.parentElement;
+        dot.classList.add('active');
+        var x=dot.getBoundingClientRect().left,
+        y=dot.getBoundingClientRect().top;
+        inputData+=dot.innerText;
+    
+        makeLineWhileMoving(x,y)
+        lineData+=tempLineData;
+    }     
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
             val.addEventListener("touchstart",makeLine);
-    })
+        })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
             val.removeEventListener("touchstart",makeLine);
-    })
+        })
     }
     function updateLine(){
         svgPath.setAttribute("d",lineData+tempLineData);
