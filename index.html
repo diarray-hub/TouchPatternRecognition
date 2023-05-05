@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>TouchTracker</title>
   <style>
     *{
       margin: 0;
@@ -28,7 +28,7 @@
       -webkit-user-select: none;
     }
     .lockBox{
-      width: 400px;
+      width: 350px;
       height: 400px;
       border: 1px solid #00cbff;
       display: flex;
@@ -95,7 +95,7 @@
 
     var lockBox=op('.lockBox');
     for(var a=0; a< 16; a++){
-      lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" onmousedown="down(this)"><i>${a}</i></div></div>`)
+      lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
     }
 
     var startDot,
@@ -122,16 +122,16 @@
       },500)
     }
 
-    function down(elem){
+    function TouchStart(elem){
       startDot=elem;
-      lockBox.addEventListener('mousemove',moving)
+      lockBox.addEventListener('touchmove',moving)
       addEvToMouseEnter();
       lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
       makeLine();
       startDot.classList.add("active")
     }
-    document.onmouseup=function (){
-      lockBox.removeEventListener('mousemove',moving)
+    document.ontouchend=function (){
+      lockBox.removeEventListener('touchmove',moving)
       removeEvToMouseEnter();
       tempLineData=''
       updateLine();
@@ -163,12 +163,12 @@
 
     function addEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
-        val.addEventListener("mouseenter",makeLine);
+        val.addEventListener("touchstart",makeLine);
       })
     }
     function removeEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
-        val.removeEventListener("mouseenter",makeLine);
+        val.removeEventListener("touchstart",makeLine);
       })
     }
     function updateLine(){
