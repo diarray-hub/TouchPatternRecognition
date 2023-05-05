@@ -129,21 +129,20 @@
         },500)
     }
 
-    function TouchStart(elem, event){
+    function TouchStart(elem){
         startDot=elem;
         document.addEventListener('touchmove', moving);
         addEvToMouseEnter();
         lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine(event);
+        makeLine();
         startDot.classList.add("active")
     }
-    //
     document.ontouchend=function (){
         document.removeEventListener('touchmove', moving);
         removeEvToMouseEnter();
         tempLineData=''
         updateLine();
-        end(startDot,tempLineData,lineData)
+        end()
     }
     function moving(e){
         makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
@@ -157,8 +156,8 @@
         updateLine()
     }
 
-    function makeLine(e){
-        e.preventDefault();
+    function makeLine(e=startDot){
+        e.target=startDot;
         var dot=e.target.parentElement;
         dot.classList.add('active');
         var x=dot.getBoundingClientRect().left,
@@ -175,13 +174,13 @@
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",function(e){
-                TouchStart(this, e);
-            });
+            val.removeEventListener("touchstart",makeLine);
         })
     }
     function updateLine(){
-        svgPath.setAttribute("d",lineData+tempLineData);
+        lineData += tempLineData;
+        svgPath.setAttribute("d",lineData);
+        tempLineData = '';
     }
   </script>
 <script src="https://www.drv.tw/inc/wd.js?s=xncz6jvtel8xrnny9ta6nw"></script>
