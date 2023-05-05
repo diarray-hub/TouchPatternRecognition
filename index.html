@@ -1,131 +1,182 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-        <meta name="description" content="Press with 3 fingers to export">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="viewport" content="initial-scale=1"> 
-        <meta content='yes' name='apple-mobile-web-app-capable'/>
-        <meta content='yes' name='mobile-web-app-capable'/>
-        <meta name="apple-mobile-web-app-title" content="TouchTracker">
-        <link href="./theapp/TouchTracker/icon.png" rel="apple-touch-icon">
-        <style>
-            body {
-                margin: 0;
-                background-color: #00b1a8;
-                width: 100%;
-                height:100%;
-                user-select: none;
-            }
-            body,
-            html {
-                position: fixed;
-            }
-            #tl {
-                top:  env(safe-area-inset-top, 20pt);
-                left: 20pt;
-            }
-            #tr {
-                top:  env(safe-area-inset-top, 20pt);
-                right: 20pt;
-            }
-            #br {
-                bottom: max(20pt, env(safe-area-inset-bottom, 20pt));
-                right: 20pt;
-            }
-            #bl {
-                bottom: max(20pt, env(safe-area-inset-bottom, 20pt));
-                left: 20pt;
-            }
-            span {
-                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                position: absolute;
-                font-size: 50px;
-                color: darkblue;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .flex{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    body{
+      width: 100vw;
+      height: 100vh;
+      background: #121212;
+      --baseCol: #00cb88;
+    }
+    .lockBox,
+    .lockBox *{
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .lockBox{
+      width: 400px;
+      height: 400px;
+      border: 1px solid #00cbff;
+      display: flex;
+      justify-content: space-between;
+      align-content: space-between;
+      flex-flow: row wrap;
+      z-index: 1;
+      border-radius: 5px;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border: 1px solid #00cbff;
+      margin: 40px;
+      border-radius: 50%;
+      box-shadow: 0 0 30px var(--baseCol);
+    }
+    .dot.active{
+      animation: on .25s cubic-bezier(0, 2.24, 0.2, 2.23) forwards;
+      transform: scale(0);
+      pointer-events: none;
+      border: none;
+    }
+    .dot i{pointer-events: none;opacity: 0;}
 
-            @supports(padding:max(0px)) {
-                body, header, footer {
-                        padding-left: min(0vmin, env(safe-area-inset-left));
-                        padding-right: min(0vmin, env(safe-area-inset-right));
-                        padding-top: min(0vmin, env(safe-area-inset-top));
-                        padding-bottom: min(0vmin, env(safe-area-inset-bottom));
-                }
-            }
-            canvas {
-                border: 1px solid black;
-                display: block;
-                margin: 0 auto;
-            }
-            div {
-                margin-top: 180px;
-              }              
-        </style>
-    </head>
-    <body>
-        <span id="tr">✕</span>
-        <span id="br">✕</span>
-        <span id="bl">✕</span>
-        <span id="tl">✕</span>
-        <div><canvas id="myCanvas" width="350" height="350"></canvas></div>
-        <script>
-            const canvas = document.querySelector('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            const dotSize = 5; // change this to adjust dot size
-            const spacing = 50; // change this to adjust spacing between dots
-            
-            const xStart = (canvas.width - (dotSize * 7 + spacing * 6)) / 2 + 27; // center horizontally
-            const yStart = (canvas.height - (dotSize * 7 + spacing * 6)) / 2 + 27; // center vertically
-            
-            for (let i = 0; i < 6; i++) {
-              for (let j = 0; j < 6; j++) {
-                const x = xStart + i * (dotSize + spacing);
-                const y = yStart + j * (dotSize + spacing);
-                ctx.beginPath();
-                ctx.arc(x, y, dotSize, 0, 2 * Math.PI);
-                ctx.fill();
-              }
-            }
-            
-            let prevDot = null;
+    @keyframes on{
+      100%{
+        background: var(--baseCol);
+        transform: scale(1);
+        box-shadow: 0 0 30px 5px var(--baseCol);
+      }
+    }
+    .dotArea{
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      left: -16px;top: -16px;
+      cursor: pointer;
+    }
+    .lockBox svg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      pointer-events: none;
+      z-index: -1;
+      fill: none;
+      stroke: var(--baseCol);
+    }
 
-            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+  </style>
+</head>
 
-            function handleTouchStart(e) {
-            e.preventDefault(); // prevent scrolling on touch devices
-            const dot = getDotAtCoords(e.touches[0].clientX, e.touches[0].clientY);
-            if (dot) {
-                if (prevDot) {
-                drawLine(prevDot, dot);
-                }
-                prevDot = dot;
-            }
-            }
+<body class="flex">
+  <div class="lockBox box">
+    <svg>
+      <path d=""></path>
+    </svg>
+  </div>
+  <script>
+    var log=console.log;
+    function op(elem){return document.querySelector(elem)}
+    function opp(elem){return document.querySelectorAll(elem)}
 
-            function getDotAtCoords(x, y) {
-            for (let i = 0; i < 6; i++) {
-                for (let j = 0; j < 6; j++) {
-                const dotX = xStart + i * (dotSize + spacing);
-                const dotY = yStart + j * (dotSize + spacing);
-                const dx = x - dotX;
-                const dy = y - dotY;
-                if (dx * dx + dy * dy < dotSize * dotSize) {
-                    return { x: dotX, y: dotY };
-                }
-                }
-            }
-            return null;
-            }
+    var lockBox=op('.lockBox');
+    for(var a=0; a< 16; a++){
+      lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" onmousedown="down(this)"><i>${a}</i></div></div>`)
+    }
 
-            function drawLine(start, end) {
-            ctx.beginPath();
-            ctx.moveTo(start.x, start.y);
-            ctx.lineTo(end.x, end.y);
-            ctx.stroke();
-            }  
-        </script>
-    </body>
-    <script src="./theapp/TouchTracker/app.js"></script>
+    var startDot,
+    svg=op("svg"),
+    dots=opp(".dot"),
+    lineData="M",
+    tempLineData,
+    svgPath=op('svg path'),
+    inputData="",
+    correctData="2413";
+
+    function end(){
+      document.body.style.setProperty('--baseCol',(inputData==correctData)?"#0f0":"#f00");
+
+      startDot=undefined;
+      lineData="M";
+      inputData="";
+      tempLineData=undefined;
+
+      setTimeout(()=>{
+        opp('.dot.active').forEach(val=>{val.classList.remove('active')})
+        svgPath.setAttribute("d",'');
+        document.body.style.setProperty('--baseCol',"#00cbff");
+      },500)
+    }
+
+    function down(elem){
+      startDot=elem;
+      lockBox.addEventListener('mousemove',moving)
+      addEvToMouseEnter();
+      lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
+      makeLine();
+      startDot.classList.add("active")
+    }
+    document.onmouseup=function (){
+      lockBox.removeEventListener('mousemove',moving)
+      removeEvToMouseEnter();
+      tempLineData=''
+      updateLine();
+      end(startDot,tempLineData,lineData)
+    }
+    function moving(e){
+      makeLineWhileMoving(e.clientX,e.clientY)
+    }
+    function makeLineWhileMoving(x,y){
+      var x=Math.floor(x - lockBox.getBoundingClientRect().left);
+      var y=Math.floor(y - lockBox.getBoundingClientRect().top);
+
+      tempLineData=" L"+x+','+y;
+
+      updateLine()
+    }
+
+    function makeLine(e=startDot){
+      e.target=startDot;
+      var dot=e.target.parentElement;
+      dot.classList.add('active');
+      var x=dot.getBoundingClientRect().left,
+      y=dot.getBoundingClientRect().top;
+      inputData+=dot.innerText;
+
+      makeLineWhileMoving(x,y)
+      lineData+=tempLineData;
+    }
+
+    function addEvToMouseEnter(){
+      opp(".dotArea").forEach(val=>{
+        val.addEventListener("mouseenter",makeLine);
+      })
+    }
+    function removeEvToMouseEnter(){
+      opp(".dotArea").forEach(val=>{
+        val.removeEventListener("mouseenter",makeLine);
+      })
+    }
+    function updateLine(){
+      svgPath.setAttribute("d",lineData+tempLineData);
+    }
+    
+  </script>
+<script src="https://www.drv.tw/inc/wd.js?s=xncz6jvtel8xrnny9ta6nw"></script>
+</body>
+<script src="./theapp/TouchTracker/app.js"></script>
 </html>
