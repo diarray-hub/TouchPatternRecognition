@@ -134,7 +134,7 @@
         document.addEventListener('touchmove', moving);
         addEvToMouseEnter();
         lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine(startDot);
+        makeLine();
         startDot.classList.add("active")
     }
     document.ontouchend=function (){
@@ -156,21 +156,20 @@
         updateLine()
     }
 
-    function makeLine(currentDot) {
+    function makeLine() {
+      var currentDot = event.target.parentElement;
       currentDot.classList.add('active');
-      var x = currentDot.getBoundingClientRect().left;
-      var y = currentDot.getBoundingClientRect().top;
+      var x = currentDot.getBoundingClientRect().left,
+          y = currentDot.getBoundingClientRect().top;
       inputData += currentDot.innerText;
       makeLineWhileMoving(x, y);
       lineData += tempLineData;
-    }    
-    function addEvToMouseEnter() {
-      opp(".dotArea").forEach((val) => {
-        val.addEventListener("touchstart", (event) => {
-          makeLine(event.target.parentElement);
-        });
-      });
-    }    
+    }
+    function addEvToMouseEnter(){
+        opp(".dotArea").forEach(val=>{
+            val.addEventListener("touchstart", makeLine);
+        })
+    }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
             val.removeEventListener("touchstart", makeLine);
