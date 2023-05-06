@@ -132,7 +132,7 @@
     function TouchStart(elem){
         startDot=elem;
         document.addEventListener('touchmove', moving);
-        addEvToMouseEnter();
+        //addEvToMouseEnter();
         lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
         makeLine();
         startDot.classList.add("active")
@@ -157,19 +157,15 @@
     }
 
     function makeLine(e=startDot){
-      e.target = startDot;
-      var dot = e.target.parentElement;
-      dot.classList.add("active");
-      var x = dot.getBoundingClientRect().left,
-        y = dot.getBoundingClientRect().top;
-      if (!startDot) {
-        inputData += dot.innerText;
-        lineData += `${x + 5},${y + 5}`;
-      } else {
-        lineData += ` L${x + 5},${y + 5}`;
-      }
-      makeLineWhileMoving(x, y);
-    }
+        e.target=startDot;
+        var dot=e.target.parentElement;
+        dot.classList.add('active');
+        var x=dot.getBoundingClientRect().left,
+        y=dot.getBoundingClientRect().top;
+        inputData+=dot.innerText;
+        makeLineWhileMoving(x,y)
+        lineData+=tempLineData;
+    } 
 
     function addEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
@@ -182,7 +178,7 @@
             val.removeEventListener("touchstart",makeLine);
         })
     }
-    
+
     function updateLine(){
         svgPath.setAttribute("d",lineData+tempLineData);
     }
