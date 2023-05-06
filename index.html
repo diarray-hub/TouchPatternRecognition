@@ -132,7 +132,6 @@
     function TouchStart(elem){
         startDot=elem;
         document.addEventListener('touchmove', moving);
-        document.addEventListener('touchend', end);
         addEvToMouseEnter();
         lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
         makeLine();
