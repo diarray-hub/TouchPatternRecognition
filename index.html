@@ -147,13 +147,22 @@
     function moving(e){
         makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
     }
+
     function makeLineWhileMoving(x,y){
-        var x=Math.floor(x - lockBox.getBoundingClientRect().left);
-        var y=Math.floor(y - lockBox.getBoundingClientRect().top);
-
-        tempLineData=" L"+x+','+y;
-
-        updateLine()
+      lineData = "M";
+      inputData = "";
+      opp(".dot.active").forEach((dot, index) => {
+          var dotX = dot.getBoundingClientRect().left;
+          var dotY = dot.getBoundingClientRect().top;
+          inputData += dot.innerText;
+          if (index === 0) {
+              lineData += `${dotX + 5},${dotY + 5}`;
+          } else {
+              lineData += ` L${dotX + 5},${dotY + 5}`;
+          }
+      });
+      lineData += ` L${x},${y}`;
+      updateLine();
     }
 
     function makeLine(e=startDot){
