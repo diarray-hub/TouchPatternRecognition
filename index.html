@@ -129,24 +129,27 @@
         },500)
     }
 
-    function TouchStart(elem){
-        startDot=elem;
-        document.addEventListener('touchmove', moving);
-        addEvToMouseEnter();
-        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine();
-        startDot.classList.add("active")
-    }
+    function touchStart(event, elem){
+      event.preventDefault();
+      startDot=elem;
+      document.addEventListener('touchmove', touchMove);
+      addEvToTouchEnter();
+      lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
+      makeLine();
+      startDot.classList.add("active")
+  }
+  
     document.ontouchend=function (){
-        document.removeEventListener('touchmove', moving);
+        document.removeEventListener('touchmove', touchMove);
         removeEvToMouseEnter();
         tempLineData=''
         updateLine();
         end()
     }
-    function moving(e){
-        makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
-    }
+    function touchMove(event){
+      event.preventDefault();
+      makeLineWhileMoving(event.touches[0].clientX,event.touches[0].clientY)
+    }  
     function makeLineWhileMoving(x,y){
         var x=Math.floor(x - lockBox.getBoundingClientRect().left);
         var y=Math.floor(y - lockBox.getBoundingClientRect().top);
@@ -156,23 +159,24 @@
         updateLine()
     }
 
-    function makeLine(e) {
-      var dot = e.target.parentElement;
-      dot.classList.add('active');
-      var x = dot.getBoundingClientRect().left,
-      y = dot.getBoundingClientRect().top;
-      inputData += dot.innerText;
-      makeLineWhileMoving(x, y)
-      lineData += tempLineData;
-    }    
+    function makeLine(e=startDot){
+        e.target=startDot;
+        var dot=e.target.parentElement;
+        dot.classList.add('active');
+        var x=dot.getBoundingClientRect().left,
+        y=dot.getBoundingClientRect().top;
+        inputData+=dot.innerText;
+        makeLineWhileMoving(x,y)
+        lineData+=tempLineData;
+    }     
     function addEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
-          val.addEventListener("touchstart",makeLine);
+          val.addEventListener("touchmove",makeLine);
       })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
+            val.removeEventListener("touchmove",makeLine);
         })
     }
     function updateLine(){
