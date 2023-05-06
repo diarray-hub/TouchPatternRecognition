@@ -156,22 +156,15 @@
         updateLine()
     }
 
-    function makeLine(e){
-      var dot=e.target.parentElement;
-      if (dot.classList.contains('active')) {
-          // We've already touched this dot before, so add a line segment to the last touched dot
-          var x=dot.getBoundingClientRect().left,
-          y=dot.getBoundingClientRect().top;
-          makeLineWhileMoving(x,y);
-          lineData+=tempLineData;
-          updateLine();
-      } else {
-          // This is the first time we're touching this dot, so make it the active dot
-          dot.classList.add('active');
-          inputData+=dot.innerText;
-          updateLine();
-      }
-  }
+    function makeLine(e) {
+      var dot = e.target.parentElement;
+      dot.classList.add('active');
+      var x = dot.getBoundingClientRect().left,
+      y = dot.getBoundingClientRect().top;
+      inputData += dot.innerText;
+      makeLineWhileMoving(x, y)
+      lineData += tempLineData;
+    }    
     function addEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
           val.addEventListener("touchstart",makeLine);
