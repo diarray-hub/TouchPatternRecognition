@@ -156,20 +156,26 @@
         updateLine()
     }
 
-    function makeLine(e=startDot){
-        e.target=startDot;
-        var dot=e.target.parentElement;
-        dot.classList.add('active');
-        var x=dot.getBoundingClientRect().left,
-        y=dot.getBoundingClientRect().top;
-        inputData+=dot.innerText;
-        makeLineWhileMoving(x,y)
-        lineData+=tempLineData;
-    }     
+    function makeLine(e){
+      var dot=e.target.parentElement;
+      if (dot.classList.contains('active')) {
+          // We've already touched this dot before, so add a line segment to the last touched dot
+          var x=dot.getBoundingClientRect().left,
+          y=dot.getBoundingClientRect().top;
+          makeLineWhileMoving(x,y);
+          lineData+=tempLineData;
+          updateLine();
+      } else {
+          // This is the first time we're touching this dot, so make it the active dot
+          dot.classList.add('active');
+          inputData+=dot.innerText;
+          updateLine();
+      }
+  }
     function addEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
-        })
+      opp(".dotArea").forEach(val=>{
+          val.addEventListener("touchstart",makeLine);
+      })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
@@ -180,7 +186,6 @@
         svgPath.setAttribute("d",lineData+tempLineData);
     }
   </script>
-<!-- <script src="https://www.drv.tw/inc/wd.js?s=xncz6jvtel8xrnny9ta6nw"></script> -->
 </body>
 <script src="./theapp/TouchTracker/app.js"></script>
 </html>
