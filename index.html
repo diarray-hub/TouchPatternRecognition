@@ -168,12 +168,13 @@
     }     
     function addEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
-          val.addEventListener("touchenter",makeLine);
+          startDot = val
+          val.addEventListener("touchstart",makeLine);
       })
     }
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchenter",makeLine);
+            val.removeEventListener("touchstart",makeLine);
         })
     }
     function updateLine(){
