@@ -103,7 +103,7 @@
 
     var lockBox=op('.lockBox');
     for(var a=0; a< 15; a++){
-    lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
+    lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)" ontouchenter="startDot = this"><i>${a}</i></div></div>`)
     }
 
     var startDot,
@@ -168,7 +168,6 @@
     }     
     function addEvToMouseEnter(){
       opp(".dotArea").forEach(val=>{
-          startDot = val
           val.addEventListener("touchstart",makeLine);
       })
     }
