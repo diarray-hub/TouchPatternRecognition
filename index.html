@@ -113,7 +113,18 @@
     tempLineData,
     svgPath=op('svg path'),
     inputData="";
-
+    
+    function getDotAt(x, y) {
+      for (var i = 0; i < dots.length; i++) {
+        var dot = dots[i];
+        var dotRect = dot.getBoundingClientRect();
+        if (x >= dotRect.left && x <= dotRect.right && y >= dotRect.top && y <= dotRect.bottom) {
+          return dot;
+        }
+      }
+      return null;
+    }
+    
     function end(){
         document.body.style.setProperty('--baseCol',(inputData.length === 5)?"#0f0":"#f00");
 
@@ -148,23 +159,28 @@
         makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
     }
 
-    function makeLineWhileMoving(x,y){
-      lineData = "M";
-      inputData = "";
-      opp(".dot.active").forEach((dot, index) => {
-          var dotX = dot.getBoundingClientRect().left;
-          var dotY = dot.getBoundingClientRect().top;
-          inputData += dot.innerText;
-          if (index === 0) {
-              lineData += `${dotX + 5},${dotY + 5}`;
-          } else {
-              lineData += ` L${dotX + 5},${dotY + 5}`;
-          }
-      });
-      lineData += ` L${x},${y}`;
-      updateLine();
+    function makeLineWhileMoving(x, y) {
+      var x = Math.floor(x - lockBox.getBoundingClientRect().left);
+      var y = Math.floor(y - lockBox.getBoundingClientRect().top);
+      
+      var dot = getDotAt(x, y);
+      if (dot && dot != startDot && !dot.classList.contains('active')) {
+        dot.classList.add('active');
+        inputData += dot.innerText;
+    
+        var prevDot = opp('.dot.active')[opp('.dot.active').length - 2];
+        if (prevDot) {
+          var prevX = prevDot.parentElement.offsetLeft + 5;
+          var prevY = prevDot.parentElement.offsetTop + 5;
+          tempLineData = " L" + prevX + "," + prevY + " L" + x + "," + y;
+        } else {
+          tempLineData = " L" + x + "," + y;
+        }
+    
+        updateLine();
+      }
     }
-
+    
     function makeLine(e=startDot){
         e.target=startDot;
         var dot=e.target.parentElement;
