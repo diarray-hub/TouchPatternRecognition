@@ -173,21 +173,13 @@
 
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchmove", function(event){
-              var touch = event.touches[0]
-              var elementTouching = document.elementFromPoint(
-                touch.screenX, touch.screenY
-              )
-              if (elementTouching.className == "dotArea"){
-                TouchStart(elementTouching);
-              }
-            });
+            val.addEventListener("touchstart",makeLine);
         })
     }
 
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchenter",makeLine);
+            val.removeEventListener("touchstart",makeLine);
         })
     }
 
