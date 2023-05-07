@@ -92,100 +92,69 @@
 <body class="flex">
   <h2>Rely just 5 dots</h2>
   <div class="lockBox box">
-    <svg>
+   <!-- <svg>
       <path d=""></path>
-    </svg>
+    </svg>--> 
   </div>
   <script>
-    var log=console.log;
-    function op(elem){return document.querySelector(elem)}
-    function opp(elem){return document.querySelectorAll(elem)}
+    var lockBox = document.querySelector('.lockBox');
+    var dots = [];
+    var activeDots = [];
+    var lineData = "";
+    var svgPath;
 
-    var lockBox=op('.lockBox');
-    for(var a=0; a< 15; a++){
-    lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
+    function createDot(index) {
+      var dot = document.createElement("div");
+      dot.className = "dot";
+      dot.innerHTML = `<div class="dotArea" ontouchstart="touchStart(${index})"><i>${index}</i></div>`;
+      lockBox.appendChild(dot);
+      dots.push(dot);
     }
 
-    var startDot,
-    svg=op("svg"),
-    dots=opp(".dot"),
-    lineData="M",
-    tempLineData,
-    svgPath=op('svg path'),
-    inputData="";
-
-    function end(){
-        document.body.style.setProperty('--baseCol',(inputData.length === 5)?"#0f0":"#f00");
-
-        startDot=undefined;
-        lineData="M";
-        inputData="";
-        tempLineData=undefined;
-
-        setTimeout(()=>{
-            opp('.dot.active').forEach(val=>{val.classList.remove('active')})
-            svgPath.setAttribute("d",'');
-            document.body.style.setProperty('--baseCol',"#00cbff");
-        },500)
+    for (var a = 0; a < 9; a++) {
+      createDot(a);
     }
 
-    function TouchStart(elem){
-        startDot=elem;
-        document.addEventListener('touchmove', moving);
-        addEvToMouseEnter();
-        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine();
-        startDot.classList.add("active")
-    }
-    
-    document.ontouchend=function (){
-        document.removeEventListener('touchmove', moving);
-        removeEvToMouseEnter();
-        tempLineData=''
-        updateLine();
-        end()
-    }
+    function touchStart(index) {
+      var dot = dots[index];
+      dot.classList.add("active");
+      activeDots.push(dot);
 
-    function moving(e){
-        makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
-    }
+      if (activeDots.length === 1) {
+        svgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        svgPath.setAttribute("d", `M${dot.offsetLeft + 5},${dot.offsetTop + 5}`);
+        svgPath.setAttribute("stroke", "var(--baseCol)");
+        svgPath.setAttribute("fill", "none");
+        lockBox.appendChild(svgPath);
+      } else {
+        var prevDot = activeDots[activeDots.length - 2];
+        var y1 = prevDot.offsetTop + 5;
+        var x2 = dot.offsetLeft + 5;
+        var y2 = dot.offsetTop + 5;
 
-    function makeLineWhileMoving(x,y){
-        var x=Math.floor(x - lockBox.getBoundingClientRect().left);
-        var y=Math.floor(y - lockBox.getBoundingClientRect().top);
-
-        tempLineData=" L"+x+','+y;
-
-        updateLine()
+        lineData += ` L${x2},${y2}`;
+        svgPath.setAttribute("d", lineData);
+      }
     }
 
-    function makeLine(e=startDot){
-        e.target=startDot;
-        var dot=e.target.parentElement;
-        dot.classList.add('active');
-        var x=dot.getBoundingClientRect().left,
-        y=dot.getBoundingClientRect().top;
-        inputData+=dot.innerText;
-    
-        makeLineWhileMoving(x,y)
-        lineData+=tempLineData;
-    } 
-
-    function addEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
-        })
+    function touchEnd() {
+      if (activeDots.length > 1) {
+        lockBox.removeChild(svgPath);
+        lineData = "";
+        activeDots = [];
+      }
     }
 
-    function removeEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
-        })
+    function clearLock() {
+      activeDots.forEach(dot => dot.classList.remove("active"));
+      lockBox.removeChild(svgPath);
+      lineData = "";
+      activeDots = [];
     }
 
-    function updateLine(){
-        svgPath.setAttribute("d",lineData+tempLineData);
-    }
+    lockBox.addEventListener("touchend", touchEnd);
+    lockBox.addEventListener("touchcancel", touchEnd);
+    lockBox.addEventListener("touchmove", e => e.preventDefault());
   </script>
 </body>
 <script src="./theapp/TouchTracker/app.js"></script>
