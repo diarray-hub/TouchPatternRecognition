@@ -163,8 +163,8 @@
         e.target=startDot;
         var dot=e.target.parentElement;
         dot.classList.add('active');
-        var x=dot.getBoundingClientRect().left,
-        y=dot.getBoundingClientRect().top;
+        var x=dot.getBoundingClientRect().left + 5,
+        y=dot.getBoundingClientRect().top + 5;
         inputData+=dot.innerText;
     
         makeLineWhileMoving(x,y)
