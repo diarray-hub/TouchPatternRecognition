@@ -106,7 +106,7 @@
     lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
     }
 
-    //var startDot,
+    var startDot,
     svg=op("svg"),
     dots=opp(".dot"),
     lineData="M",
@@ -118,9 +118,9 @@
         document.body.style.setProperty('--baseCol',(inputData.length === 5)?"#0f0":"#f00");
 
         startDot=undefined;
-        lineData="";
+        lineData="M";
         inputData="";
-        //tempLineData=undefined;
+        tempLineData=undefined;
 
         setTimeout(()=>{
             opp('.dot.active').forEach(val=>{val.classList.remove('active')})
@@ -133,7 +133,7 @@
         startDot=elem;
         document.addEventListener('touchmove', moving);
         addEvToMouseEnter();
-        lineData+=`M${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
+        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
         makeLine();
         startDot.classList.add("active")
     }
