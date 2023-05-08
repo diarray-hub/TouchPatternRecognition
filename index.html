@@ -103,7 +103,7 @@
 
     var lockBox=op('.lockBox');
     for(var a=0; a< 15; a++){
-    lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
+        lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="touchStart(this)" ontouchmove="touchMove(this)" ontouchend="touchEnd(this)"><i>${a}</i></div></div>`)
     }
 
     var startDot,
@@ -129,25 +129,22 @@
         },500)
     }
 
-    function TouchStart(elem){
+    function touchStart(elem){
         startDot=elem;
-        document.addEventListener('touchmove', moving);
-        addEvToMouseEnter();
+        addActiveClass(startDot.parentElement);
         lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
         makeLine();
-        startDot.classList.add("active")
-    }
-    
-    document.ontouchend=function (){
-        document.removeEventListener('touchmove', moving);
-        removeEvToMouseEnter();
-        tempLineData=''
-        updateLine();
-        end()
     }
 
-    function moving(e){
-        makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
+    function touchMove(elem){
+        makeLineWhileMoving(elem.touches[0].clientX,elem.touches[0].clientY)
+    }
+
+    function touchEnd(elem){
+        removeActiveClass(elem.parentElement);
+        tempLineData='';
+        updateLine();
+        end()
     }
 
     function makeLineWhileMoving(x,y){
@@ -162,29 +159,26 @@
     function makeLine(e=startDot){
         e.target=startDot;
         var dot=e.target.parentElement;
-        dot.classList.add('active');
+        inputData+=dot.innerText;
+
         var x=dot.getBoundingClientRect().left,
         y=dot.getBoundingClientRect().top;
-        inputData+=dot.innerText;
-    
+
         makeLineWhileMoving(x,y)
         lineData+=tempLineData;
     } 
 
-    function addEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
-        })
+    function addActiveClass(dot) {
+        dot.classList.add('active');
+        dot.querySelector('.dotArea').removeEventListener('touchstart', touchStart);
     }
 
-    function removeEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
-        })
+    function removeActiveClass(dot) {
+        dot.classList.remove('active');
+        dot.querySelector('.dotArea').addEventListener('touchstart', touchStart);
     }
-
     function updateLine(){
-        svgPath.setAttribute("d",lineData+tempLineData);
+      svgPath.setAttribute("d",lineData+tempLineData);
     }
   </script>
 </body>
