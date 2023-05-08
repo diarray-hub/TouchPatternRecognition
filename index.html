@@ -1,192 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TouchTracker</title>
-  <style>
-    *{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      position: relative;
-    }
-    .flex{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    body{
-      width: 100vw;
-      height: 100vh;
-      background: #121212;
-      --baseCol: #00cb88;
-    }
-    .lockBox,
-    .lockBox *{
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    .lockBox{
-      width: 350px;
-      height: 450px;
-      border: 1px solid #00cbff;
-      display: flex;
-      justify-content: space-between;
-      align-content: space-between;
-      flex-flow: row wrap;
-      z-index: 1;
-      border-radius: 5px;
-    }
-    .dot{
-      width: 10px;
-      height: 10px;
-      border: 1px solid #00cbff;
-      margin: 40px;
-      border-radius: 50%;
-      box-shadow: 0 0 30px var(--baseCol);
-    }
-    .dot.active{
-      animation: on .25s cubic-bezier(0, 2.24, 0.2, 2.23) forwards;
-      transform: scale(0);
-      pointer-events: none;
-      border: none;
-    }
-    .dot i{pointer-events: none;opacity: 0;}
-
-    @keyframes on{
-      100%{
-        background: var(--baseCol);
-        transform: scale(1);
-        box-shadow: 0 0 30px 5px var(--baseCol);
-      }
-    }
-    .dotArea{
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      left: -16px;top: -16px;
-      cursor: pointer;
-    }
-    .lockBox svg {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      pointer-events: none;
-      z-index: -1;
-      fill: none;
-      stroke: var(--baseCol);
-    }
-
-    h2{
-        color: #fff;
-        font-style: italic;
-        position: absolute;
-        text-align: center;
-        top: 80px;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<title>Android Screen Lock Pattern</title>
+	<style>
+		#lock-screen {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background-color: #f5f5f5;
+		}
+		
+		.dot {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			margin: 10px;
+			background-color: #fff;
+			border: 2px solid #ccc;
+			box-sizing: border-box;
+			touch-action: none;
+		}
+		
+		.dot.selected {
+			background-color: #6c63ff;
+			border-color: #6c63ff;
+		}
+	</style>
 </head>
-
-<body class="flex">
-  <h2>Rely just 5 dots</h2>
-  <div class="lockBox box">
-    <svg>
-      <path d=""></path>
-    </svg>
-  </div>
-  <script>
-    var log=console.log;
-    function op(elem){return document.querySelector(elem)}
-    function opp(elem){return document.querySelectorAll(elem)}
-
-    var lockBox=op('.lockBox');
-    for(var a=0; a< 15; a++){
-    lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
-    }
-
-    var startDot,
-    svg=op("svg"),
-    dots=opp(".dot"),
-    lineData="M",
-    tempLineData,
-    svgPath=op('svg path'),
-    inputData="";
-
-    function end(){
-        document.body.style.setProperty('--baseCol',(inputData.length === 5)?"#0f0":"#f00");
-
-        startDot=undefined;
-        lineData="M";
-        inputData="";
-        tempLineData=undefined;
-
-        setTimeout(()=>{
-            opp('.dot.active').forEach(val=>{val.classList.remove('active')})
-            svgPath.setAttribute("d",'');
-            document.body.style.setProperty('--baseCol',"#00cbff");
-        },500)
-    }
-
-    function TouchStart(elem){
-        startDot=elem;
-        document.addEventListener('touchmove', moving);
-        addEvToMouseEnter();
-        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine();
-        startDot.classList.add("active")
-    }
-    
-    document.ontouchend=function (){
-        document.removeEventListener('touchmove', moving);
-        removeEvToMouseEnter();
-        tempLineData=''
-        updateLine();
-        end()
-    }
-
-    function moving(e){
-        makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
-    }
-
-    function makeLineWhileMoving(x,y){
-        var x=Math.floor(x - lockBox.getBoundingClientRect().left);
-        var y=Math.floor(y - lockBox.getBoundingClientRect().top);
-
-        tempLineData=" L"+x+','+y;
-
-        updateLine()
-    }
-
-    function makeLine(e=startDot){
-        e.target=startDot;
-        var dot=e.target.parentElement;
-        dot.classList.add('active');
-        var x=dot.getBoundingClientRect().left,
-        y=dot.getBoundingClientRect().top;
-        inputData+=dot.innerText;
-    
-        makeLineWhileMoving(x,y)
-        lineData+=tempLineData;
-    } 
-
-    function addEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
-        })
-    }
-
-    function removeEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
-        })
-    }
-
-    function updateLine(){
-        svgPath.setAttribute("d",lineData+tempLineData);
-    }
-  </script>
+<body>
+	<div id="lock-screen">
+		<div class="dot" data-index="1"></div>
+		<div class="dot" data-index="2"></div>
+		<div class="dot" data-index="3"></div>
+		<div class="dot" data-index="4"></div>
+		<div class="dot" data-index="5"></div>
+		<div class="dot" data-index="6"></div>
+		<div class="dot" data-index="7"></div>
+		<div class="dot" data-index="8"></div>
+		<div class="dot" data-index="9"></div>
+		<div class="dot" data-index="10"></div>
+		<div class="dot" data-index="11"></div>
+		<div class="dot" data-index="12"></div>
+		<div class="dot" data-index="13"></div>
+		<div class="dot" data-index="14"></div>
+		<div class="dot" data-index="15"></div>
+	</div>
+	<script>
+		let selectedDots = [];
+		const dots = document.querySelectorAll('.dot');
+		dots.forEach(dot => {
+			dot.addEventListener('touchstart', event => {
+				event.preventDefault();
+				dot.classList.add('selected');
+				selectedDots.push(dot.dataset.index);
+			});
+			dot.addEventListener('touchmove', event => {
+				event.preventDefault();
+				const rect = dot.getBoundingClientRect();
+				const touch = event.targetTouches[0];
+				if (touch.clientX < rect.left || touch.clientX > rect.right ||
+					touch.clientY < rect.top || touch.clientY > rect.bottom) {
+					dot.classList.remove('selected');
+					selectedDots.splice(selectedDots.indexOf(dot.dataset.index), 1);
+				}
+			});
+			dot.addEventListener('touchend', event => {
+				event.preventDefault();
+				if (selectedDots.length > 0) {
+					const pattern = selectedDots.join('');
+					console.log(pattern);
+					// Replace this with your own logic for verifying the pattern
+				}
+				dots.forEach(dot => dot.classList.remove('selected'));
+				selectedDots = [];
+			});
+		});
+	</script>
 </body>
-<script src="./theapp/TouchTracker/app.js"></script>
 </html>
