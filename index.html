@@ -129,14 +129,21 @@
         },500)
     }
 
-    function TouchStart(elem){
-        startDot=elem;
-        document.addEventListener('touchmove', moving);
-        // addEvToMouseEnter();
-        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
+    function TouchStart(elem) {
+      if (startDot) {
+        // connect previous dot with current dot
+        var startX = startDot.parentElement.offsetLeft + 5;
+        var startY = startDot.parentElement.offsetTop + 5;
+        var endX = elem.parentElement.offsetLeft + 5;
+        var endY = elem.parentElement.offsetTop + 5;
+        lineData += `L${endX},${endY}`;
         makeLine();
-        startDot.classList.add("active")
-    }
+      }
+      
+      startDot = elem;
+      startDot.classList.add("active");
+      inputData += startDot.querySelector("i").textContent;
+    }    
     
     document.ontouchend=function (){
         document.removeEventListener('touchmove', moving);
@@ -148,11 +155,6 @@
 
     function moving(e){
         makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
-        var touch = e.touches[0]
-        var elem = document.elementFromPoint(touch.clientX, touch.clientY)
-        if (elem.className === "dotArea"){
-          makeLine(elem);
-        }
     }
 
     function makeLineWhileMoving(x,y){
