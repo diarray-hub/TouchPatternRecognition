@@ -97,94 +97,89 @@
     </svg>
   </div>
   <script>
-    var log=console.log;
-    function op(elem){return document.querySelector(elem)}
-    function opp(elem){return document.querySelectorAll(elem)}
+    const lockBox = document.querySelector(".lockBox");
+    const dots = Array.from(lockBox.querySelectorAll(".dot"));
+    const dotArea = Array.from(lockBox.querySelectorAll(".dotArea"));
+    const path = lockBox.querySelector("path");
 
-    var lockBox=op('.lockBox');
-    for(var a=0; a< 15; a++){
-    lockBox.insertAdjacentHTML("afterbegin",`<div class="dot"><div class="dotArea" ontouchstart="TouchStart(this)"><i>${a}</i></div></div>`)
-    }
+    let activeDots = [];
+    let pattern = "";
 
-    var startDot,
-    svg=op("svg"),
-    dots=opp(".dot"),
-    lineData="M",
-    tempLineData,
-    svgPath=op('svg path'),
-    inputData="";
+    // Add event listeners to all the dot areas
+    dotArea.forEach((area, index) => {
+      area.addEventListener("touchstart", (event) => {
+        const dot = dots[index];
+        dot.classList.add("active");
+        activeDots.push(index);
 
-    function end(){
-        document.body.style.setProperty('--baseCol',(inputData.length === 5)?"#0f0":"#f00");
+        // Draw the path based on the active dots
+        path.setAttribute("d", getPath());
 
-        startDot=undefined;
-        lineData="M";
-        inputData="";
-        tempLineData=undefined;
+        // If we have selected at least two dots, save the pattern
+        if (activeDots.length > 1) {
+          pattern = activeDots.join("");
+        }
+      });
 
-        setTimeout(()=>{
-            opp('.dot.active').forEach(val=>{val.classList.remove('active')})
-            svgPath.setAttribute("d",'');
-            document.body.style.setProperty('--baseCol',"#00cbff");
-        },500)
-    }
+      area.addEventListener("touchmove", (event) => {
+        // Check if any of the dots are being hovered over
+        dots.forEach((dot, index) => {
+          const rect = dot.getBoundingClientRect();
 
-    function TouchStart(elem){
-        startDot=elem;
-        document.addEventListener('touchmove', moving);
-        addEvToMouseEnter();
-        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
-        makeLine();
-        startDot.classList.add("active")
-    }
-    
-    document.ontouchend=function (){
-        document.removeEventListener('touchmove', moving);
-        removeEvToMouseEnter();
-        tempLineData=''
-        updateLine();
-        end()
-    }
+          if (
+            event.touches[0].clientX >= rect.left &&
+            event.touches[0].clientX <= rect.right &&
+            event.touches[0].clientY >= rect.top &&
+            event.touches[0].clientY <= rect.bottom
+          ) {
+            // If the dot is not already active, add it to the active dots
+            if (!dot.classList.contains("active")) {
+              dot.classList.add("active");
+              activeDots.push(index);
 
-    function moving(e){
-        makeLineWhileMoving(e.touches[0].clientX,e.touches[0].clientY)
-    }
+              // Draw the path based on the active dots
+              path.setAttribute("d", getPath());
 
-    function makeLineWhileMoving(x,y){
-        var x=Math.floor(x - lockBox.getBoundingClientRect().left);
-        var y=Math.floor(y - lockBox.getBoundingClientRect().top);
+              // If we have selected at least two dots, save the pattern
+              if (activeDots.length > 1) {
+                pattern = activeDots.join("");
+              }
+            }
+          }
+        });
+      });
 
-        tempLineData=" L"+x+','+y;
+      area.addEventListener("touchend", (event) => {
+        // If the pattern is not empty, alert the user
+        if (pattern) {
+          alert(`Pattern: ${pattern}`);
+        }
 
-        updateLine()
-    }
+        // Reset the active dots and the pattern
+        activeDots = [];
+        pattern = "";
 
-    function makeLine(e=startDot){
-        e.target=startDot;
-        var dot=e.target.parentElement;
-        dot.classList.add('active');
-        var x=dot.getBoundingClientRect().left,
-        y=dot.getBoundingClientRect().top;
-        inputData+=dot.innerText;
-    
-        makeLineWhileMoving(x,y)
-        lineData+=tempLineData;
-    } 
+        // Remove the "active" class from all the dots
+        dots.forEach((dot) => {
+          dot.classList.remove("active");
+        });
 
-    function addEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
-        })
-    }
+        // Clear the path
+        path.setAttribute("d", "");
+      });
+    });
 
-    function removeEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.removeEventListener("touchstart",makeLine);
-        })
-    }
+    // Helper function to get the path string based on the active dots
+    function getPath() {
+      const activeCoords = activeDots.map((index) => {
+        const dot = dots[index];
+        const rect = dot.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        return `${x},${y}`;
+      });
 
-    function updateLine(){
-        svgPath.setAttribute("d",lineData+tempLineData);
+      return `M${activeCoords.join("L")}`;
     }
   </script>
 </body>
