@@ -140,7 +140,7 @@
     
     document.ontouchend=function (){
         document.removeEventListener('touchmove', moving);
-        removeEvToMouseEnter();
+        // removeEvToMouseEnter();
         tempLineData=''
         updateLine();
         end()
@@ -151,7 +151,7 @@
         var touch = e.touches[0]
         var elem = document.elementFromPoint(touch.clientX, touch.clientY)
         if (elem.className === "dotArea"){
-          TouchStart(elem)
+          makeLine(elem);
         }
     }
 
