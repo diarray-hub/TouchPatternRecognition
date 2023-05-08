@@ -140,7 +140,7 @@
     
     document.ontouchend=function (){
         document.removeEventListener('touchmove', moving);
-        removeEvToMouseEnter();
+        //removeEvToMouseEnter();
         tempLineData=''
         updateLine();
         end()
@@ -172,11 +172,22 @@
     } 
 
     function addEvToMouseEnter(){
-        opp(".dotArea").forEach(val=>{
-            val.addEventListener("touchstart",makeLine);
-        })
-    }
+      var dotAreas = opp('.dotArea');
 
+      document.addEventListener('touchmove', function(e) {
+          var touchX = e.touches[0].clientX;
+          var touchY = e.touches[0].clientY;
+      
+          dotAreas.forEach(function(dotArea) {
+              var rect = dotArea.getBoundingClientRect();
+              if (touchX >= rect.left && touchX <= rect.right && touchY >= rect.top && touchY <= rect.bottom) {
+                  makeLine();
+              }
+          });
+      });
+      
+    }
+  
     function removeEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
             val.removeEventListener("touchstart",makeLine);
