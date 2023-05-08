@@ -129,25 +129,18 @@
         },500)
     }
 
-    function TouchStart(elem) {
-      if (startDot) {
-        // connect previous dot with current dot
-        var startX = startDot.parentElement.offsetLeft + 5;
-        var startY = startDot.parentElement.offsetTop + 5;
-        var endX = elem.parentElement.offsetLeft + 5;
-        var endY = elem.parentElement.offsetTop + 5;
-        lineData += `L${endX},${endY}`;
+    function TouchStart(elem){
+        startDot=elem;
+        document.addEventListener('touchmove', moving);
+        addEvToMouseEnter();
+        lineData+=`${startDot.parentElement.offsetLeft +5},${startDot.parentElement.offsetTop +5}`;
         makeLine();
-      }
-      
-      startDot = elem;
-      startDot.classList.add("active");
-      inputData += startDot.querySelector("i").textContent;
-    }    
+        startDot.classList.add("active")
+    }
     
     document.ontouchend=function (){
         document.removeEventListener('touchmove', moving);
-        // removeEvToMouseEnter();
+        removeEvToMouseEnter();
         tempLineData=''
         updateLine();
         end()
@@ -177,7 +170,7 @@
         makeLineWhileMoving(x,y)
         lineData+=tempLineData;
     } 
-    /*
+
     function addEvToMouseEnter(){
         opp(".dotArea").forEach(val=>{
             val.addEventListener("touchstart",makeLine);
@@ -189,7 +182,7 @@
             val.removeEventListener("touchstart",makeLine);
         })
     }
-    */
+
     function updateLine(){
         svgPath.setAttribute("d",lineData+tempLineData);
     }
