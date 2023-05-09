@@ -87,7 +87,7 @@ class TrackingSession {
         // Generate the output object
         const output = {
             name: name,
-            duration: touchTrackingsArray[4].endTimestamp - touchTrackingsArray[0].startTimestamp,
+            duration: touchTrackingsArray[24].endTimestamp - touchTrackingsArray[0].startTimestamp,
             touchTrackings: touchTrackingsArray,
             screenSize: this.screenSize,
             screenScale: this.screenScale
