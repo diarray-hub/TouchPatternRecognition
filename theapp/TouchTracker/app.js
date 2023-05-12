@@ -1,3 +1,5 @@
+import * as tf from '@tensorflow/tfjs';
+
 class TrackingSession {
     /*
     This TrackingSession offers us a general way to collect data from the screen through the app
@@ -40,7 +42,7 @@ class TrackingSession {
                 }
                 break
         }
-        if(this.endcounter === 25){
+        if(this.endcounter === 1){
             this.export()
             this.endcounter = 0
             this.activeTouch = {}
@@ -50,6 +52,22 @@ class TrackingSession {
     
     // This method will use the *download* function defined below to export data in .json file format
     export() {
+        function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
+            const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
+            const timeElapsed = timestamp - lastimestamp;
+            return distance / timeElapsed; // Eucludian speed calculus
+        }
+    
+        function calculateDirection(currentPosition, lastPosition) {
+            /*
+            Note that the angle returned by Math.atan2 is not the same as the direction in degrees (i.e. north, south, east, west). Instead, 
+            it represents the angle between the two points in the coordinate system, with the positive x-axis as the reference.
+            */
+            const deltaX = currentPosition[0] - lastPosition[0];
+            const deltaY = currentPosition[1] - lastPosition[1];
+            return Math.atan2(deltaY, deltaX);
+        }
+
         const name = "TouchTracker_Export";
         const touchTrackings = {};
         let currentTouchId;
@@ -87,28 +105,21 @@ class TrackingSession {
         // Generate the output object
         const output = {
             name: name,
-            duration: touchTrackingsArray[24].endTimestamp - touchTrackingsArray[0].startTimestamp,
+            duration: touchTrackingsArray[0].endTimestamp - touchTrackingsArray[0].startTimestamp,
             touchTrackings: touchTrackingsArray,
             screenSize: this.screenSize,
             screenScale: this.screenScale
         };
     
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
-    
-        function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
-            const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
-            const timeElapsed = timestamp - lastimestamp;
-            return distance / timeElapsed; // Eucludian speed calculus
+        var data = preprocess(touchTrackingsArray)
+        const outcome = model.predict(data)
+        if (outcome[0][0] >= 0.90) {
+            // Redirect the user to another page
+            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/Welcome.html";
         }
-    
-        function calculateDirection(currentPosition, lastPosition) {
-            /*
-            Note that the angle returned by Math.atan2 is not the same as the direction in degrees (i.e. north, south, east, west). Instead, 
-            it represents the angle between the two points in the coordinate system, with the positive x-axis as the reference.
-            */
-            const deltaX = currentPosition[0] - lastPosition[0];
-            const deltaY = currentPosition[1] - lastPosition[1];
-            return Math.atan2(deltaY, deltaX);
+        else{
+            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/Error.html";
         }
     }
 }
@@ -154,8 +165,40 @@ function download(data, filename, type) {
     }
 }
 
+function preprocess(touchTrackingArray){
+    // Implement a part of preprocessing.py stats_summary function in JS
+    var touch = touchTrackingArray[0],
+        positionsX = [],
+        positionY = [],
+        speeds = touch.speeds,
+        directions = touch.directions,
+        latency = touch.endTimestamp - touch.startTimestamp
+    touch.positions.forEach(position => {
+        positionsX.push(position[0])
+        positionY.push(position[1])
+    });
+    fields = [positionX, positionY, speeds, directions];
+    // Calculate the features
+    const features = fields.map(field => {
+        const mean = field.reduce((a, b) => a + b) / field.length;
+        const stdDev = Math.sqrt(field.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / field.length);
+        const min = Math.min(...field);
+        const max = Math.max(...field);
+        const range = max - min;
+        return [mean, stdDev, min, max, range];
+    });
+    
+    // Flatten the features into a single list
+    const flattenedFeatures = features.reduce((acc, val) => acc.concat(val), []);
+    flattenedFeatures.push(latency);
+    return [flattenedFeatures]
+}
+
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
+
+//Load the model
+const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
 
 /*
     This code adds an event listener to the touch events of the body element in an HTML document. 
