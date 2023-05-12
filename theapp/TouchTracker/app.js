@@ -51,7 +51,7 @@ class TrackingSession {
     }
     
     // This method will use the *download* function defined below to export data in .json file format
-    export() {
+    async export() {
         function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
             const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
             const timeElapsed = timestamp - lastimestamp;
@@ -112,14 +112,16 @@ class TrackingSession {
         };
     
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
+        //Load the model
+        const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         var data = preprocess(touchTrackingsArray)
         const outcome = model.predict(data)
         if (outcome[0][0] >= 0.90) {
             // Redirect the user to another page
-            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/Welcome.html";
+            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
         }
         else{
-            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/Error.html";
+            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
         }
     }
 }
@@ -165,8 +167,8 @@ function download(data, filename, type) {
     }
 }
 
+// Implement a part of preprocessing.py stats_summary function in JS
 function preprocess(touchTrackingArray){
-    // Implement a part of preprocessing.py stats_summary function in JS
     var touch = touchTrackingArray[0],
         positionsX = [],
         positionY = [],
@@ -196,9 +198,6 @@ function preprocess(touchTrackingArray){
 
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
-
-//Load the model
-const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
 
 /*
     This code adds an event listener to the touch events of the body element in an HTML document. 
