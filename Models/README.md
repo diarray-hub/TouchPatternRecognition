@@ -1,6 +1,6 @@
 # Models
 
-In this folder are saved pre-trained ready for inference, test or further training.
+In this folder are saved pre-trained models ready for inference, test or further training.
 It's the same model saved in different format
 
 ## In a folder
