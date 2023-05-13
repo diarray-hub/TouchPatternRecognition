@@ -51,7 +51,7 @@ class TrackingSession {
     }
     
     // This method will use the *download* function defined below to export data in .json file format
-    async export() {
+    export() {
         function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
             const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
             const timeElapsed = timestamp - lastimestamp;
