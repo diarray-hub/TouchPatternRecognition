@@ -13,7 +13,6 @@ class TrackingSession {
         screen.width,
         screen.height
     ]
-    endcounter = 0
     // The handle method
     handle(event, touches) {
         if (touches.length !== 1) {
@@ -36,16 +35,19 @@ class TrackingSession {
                 if (this.activeTouch[touch.identifier]) {
                     this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
                     delete this.activeTouch[touch.identifier]
-                    this.endcounter++
+                    this.export()
+                    this.activeTouch = {}
+                    this.records = []
                 }
                 break
         }
-        if(this.endcounter === 1){
+        /* This block has been add during data collect take care to declare the endcounter attribute in order to re-use it
+        if(this.endcounter === 25){
             this.export()
             this.endcounter = 0
             this.activeTouch = {}
             this.records = []
-        }
+        }*/
     }
     
     // This method will use the *download* function defined below to export data in .json file format
