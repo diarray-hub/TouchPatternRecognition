@@ -137,6 +137,35 @@ class TouchRecord {
     }
 }
 
+// Implement a part of preprocessing.py stats_summary function in JS
+function preprocess(touchTrackingArray){
+    var touch = touchTrackingArray[0],
+        positionsX = [],
+        positionY = [],
+        speeds = touch.speeds,
+        directions = touch.directions,
+        latency = touch.endTimestamp - touch.startTimestamp
+    touch.positions.forEach(position => {
+        positionsX.push(position[0])
+        positionY.push(position[1])
+    });
+    fields = [positionX, positionY, speeds, directions];
+    // Calculate the features
+    const features = fields.map(field => {
+        const mean = field.reduce((a, b) => a + b) / field.length;
+        const stdDev = Math.sqrt(field.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / field.length);
+        const min = Math.min(...field);
+        const max = Math.max(...field);
+        const range = max - min;
+        return [mean, stdDev, min, max, range];
+    });
+    
+    // Flatten the features into a single list
+    const flattenedFeatures = features.reduce((acc, val) => acc.concat(val), []);
+    flattenedFeatures.push(latency);
+    return [flattenedFeatures]
+}
+
 // Defining a function that will allows us to export collected data in .json file from the browser
 function download(data, filename, type) {
     var file = new Blob([data], {type: type});
