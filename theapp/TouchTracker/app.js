@@ -1,3 +1,5 @@
+import { loadLayersModel } from '@tensorflow/tfjs';
+
 class TrackingSession {
     /*
     This TrackingSession offers us a general way to collect data from the screen through the app
@@ -52,6 +54,7 @@ class TrackingSession {
     }
     // Recognition
     /*async recognizeUser() {
+        import * as tf from '@tensorflow/tfjs';
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         const data = preprocess(this.touchTracks);
         const outcome = await model.predict(data);
@@ -62,7 +65,7 @@ class TrackingSession {
         else {
           window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
         }
-    }*/    
+    }*/
     
     // This method will use the *download* function defined below to export data in .json file format
     export() {
@@ -239,5 +242,3 @@ document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
 });
-
-import * as tf from '@tensorflow/tfjs';
