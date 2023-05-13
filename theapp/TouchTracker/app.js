@@ -1,5 +1,3 @@
-//import * as tf from '@tensorflow/tfjs';
-
 class TrackingSession {
     /*
     This TrackingSession offers us a general way to collect data from the screen through the app
@@ -241,3 +239,5 @@ document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
 });
+
+import * as tf from '@tensorflow/tfjs';
