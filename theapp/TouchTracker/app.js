@@ -112,7 +112,7 @@ class TrackingSession {
         };
     
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
-        //Load the model
+        /*//Load the model
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         var data = preprocess(touchTrackingsArray)
         const outcome = model.predict(data)
@@ -122,7 +122,7 @@ class TrackingSession {
         }
         else{
             window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
-        }
+        }*/
     }
 }
 
