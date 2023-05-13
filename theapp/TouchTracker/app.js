@@ -113,7 +113,7 @@ class TrackingSession {
         };
     
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
-        //this.recognizeUser();
+        this.recognizeUser();
 
         function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
             const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
