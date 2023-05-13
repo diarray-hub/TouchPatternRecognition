@@ -40,7 +40,7 @@ class TrackingSession {
                 }
                 break
         }
-        if(this.endcounter === 10){
+        if(this.endcounter === 1){
             this.export()
             this.endcounter = 0
             this.activeTouch = {}
