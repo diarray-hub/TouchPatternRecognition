@@ -1,3 +1,5 @@
+import * as tf from '@tensorflow/tfjs';
+
 class TrackingSession {
     /*
     This TrackingSession offers us a general way to collect data from the screen through the app
@@ -41,7 +43,8 @@ class TrackingSession {
                 }
                 break
         }
-        /* This block has been add during data collect take care to declare the endcounter attribute in order to re-use it
+        /* 
+        //This block has been add during data collect take care to declare the endcounter attribute in order to re-use it
         if(this.endcounter === 25){
             this.export()
             this.endcounter = 0
@@ -49,6 +52,19 @@ class TrackingSession {
             this.records = []
         }*/
     }
+    // Recognition
+    async recognizeUser() {
+        const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
+        const data = preprocess(this.touchTracks);
+        const outcome = await model.predict(data);
+        if (outcome[0][0] >= 0.90) {
+          // Redirect the user to another page
+          window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
+        } 
+        else {
+          window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+        }
+    }      
     
     // This method will use the *download* function defined below to export data in .json file format
     export() {
@@ -85,6 +101,7 @@ class TrackingSession {
     
         // Create an array of touch tracking objects
         const touchTrackingsArray = Object.values(touchTrackings);
+        this.touchTracks = touchTrackingsArray;
     
         // Generate the output object
         const output = {
@@ -96,6 +113,7 @@ class TrackingSession {
         };
     
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
+        this.recognizeUser();
 
         function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
             const distance = Math.sqrt((currentPosition[0] - lastPosition[0]) ** 2 + (currentPosition[1] - lastPosition[1]) ** 2);
