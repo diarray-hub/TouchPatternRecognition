@@ -54,7 +54,6 @@ class TrackingSession {
     }
     // Recognition
     /*async recognizeUser() {
-        import * as tf from '@tensorflow/tfjs';
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         const data = preprocess(this.touchTracks);
         const outcome = await model.predict(data);
