@@ -1,4 +1,4 @@
-import * as tf from '@tensorflow/tfjs';
+//import * as tf from '@tensorflow/tfjs';
 
 class TrackingSession {
     /*
@@ -202,11 +202,11 @@ function download(data, filename, type) {
         }, 0); 
     }
 }
-/*
+
 // Creating a instance of our Trackingsession class
 const session = new TrackingSession()
 
-
+/*
     This code adds an event listener to the touch events of the body element in an HTML document. 
     The function that is passed as the second argument to addEventListener will be executed whenever the touchstart event is fired on the body element.
     *touchstart*, *touchmove* and *touchend* are  built-in JavaScript events that is triggered when a user touches the screen with their finger or stylus. 
@@ -220,7 +220,7 @@ const session = new TrackingSession()
     which will prevent the default behavior of the touchmove event from occurring. 
     Note that setting passive to false can potentially cause performance issues on mobile devices, 
     so it is generally recommended to use this option only when necessary.
-
+*/
 document.body.addEventListener('touchstart', function(e){
     e.preventDefault()
     session.handle("start", e.touches)
@@ -241,4 +241,3 @@ document.body.addEventListener('touchcancel', function(e){
     e.preventDefault()
     session.handle("end", e.changedTouches)
 });
-*/
