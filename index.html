@@ -243,16 +243,26 @@
         }*/
     }
     // Recognition
-    async recognizeUser() {
-        const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
+    recognizeUser() {
+        tf.loadLayersModel('Models/tfjs_model/model.json').then(function(model) {
+          window.model = model;
+        });
         const data = preprocess(this.touchTracks);
-        const outcome = await model.predict(data);
-        if (outcome[0][0] >= 0.90) {
-          // Redirect the user to another page
-          window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
-        } 
-        else {
-          window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+        var predict = function(input) {
+          if (window.model) {
+            window.model.predict(data).then(function(scores){
+              scores = scores[0][0];
+              if (scores >= 0.90){
+                window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
+              }
+              else {
+                window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+              }
+            });
+          } else {
+            // The model takes a bit to load, if we are too fast, wait
+            setTimeout(function(){predict(input)}, 50);
+          }
         }
     }
     
