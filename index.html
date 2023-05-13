@@ -255,13 +255,12 @@
               if (scores >= 0.90){
                 window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
               }
-              else {
+              /*else {
                 window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
-              }
+              }*/
             });
           } else {
-            // The model takes a bit to load, if we are too fast, wait
-            setTimeout(function(){predict(input)}, 50);
+            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
           }
         }
     }
