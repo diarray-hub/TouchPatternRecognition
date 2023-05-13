@@ -53,7 +53,7 @@ class TrackingSession {
         }*/
     }
     // Recognition
-    /*async recognizeUser() {
+    async recognizeUser() {
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         const data = preprocess(this.touchTracks);
         const outcome = await model.predict(data);
@@ -64,7 +64,7 @@ class TrackingSession {
         else {
           window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
         }
-    }*/
+    }
     
     // This method will use the *download* function defined below to export data in .json file format
     export() {
