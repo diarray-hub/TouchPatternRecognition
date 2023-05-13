@@ -1,4 +1,4 @@
-import * as tf from '@tensorflow/tfjs';
+//import * as tf from '@tensorflow/tfjs';
 
 class TrackingSession {
     /*
@@ -42,7 +42,7 @@ class TrackingSession {
                 }
                 break
         }
-        if(this.endcounter === 1){
+        if(this.endcounter === 10){
             this.export()
             this.endcounter = 0
             this.activeTouch = {}
@@ -115,7 +115,7 @@ class TrackingSession {
         /*//Load the model
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         var data = preprocess(touchTrackingsArray)
-        const outcome = model.predict(data)
+        const outcome = await model.predict(data)
         if (outcome[0][0] >= 0.90) {
             // Redirect the user to another page
             window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
