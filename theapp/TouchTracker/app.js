@@ -112,7 +112,7 @@ class TrackingSession {
             screenScale: this.screenScale
         };
 
-        //this.recognizeUser();
+        this.recognizeUser();
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
 
         function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
