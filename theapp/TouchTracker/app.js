@@ -1,4 +1,4 @@
-import * as tf from '@tensorflow/tfjs';
+//import * as tf from '@tensorflow/tfjs';
 
 class TrackingSession {
     /*
@@ -158,13 +158,13 @@ class TouchRecord {
 // Implement a part of preprocessing.py stats_summary function in JS
 function preprocess(touchTrackingArray){
     var touch = touchTrackingArray[0],
-        positionsX = [],
+        positionX = [],
         positionY = [],
         speeds = touch.speeds,
         directions = touch.directions,
         latency = touch.endTimestamp - touch.startTimestamp
     touch.positions.forEach(position => {
-        positionsX.push(position[0])
+        positionX.push(position[0])
         positionY.push(position[1])
     });
     fields = [positionX, positionY, speeds, directions];
