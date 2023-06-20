@@ -926,7 +926,7 @@ async function recognizeUser(touchTracks){
         //window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
     } 
     else {
-        document.write("No Yo!")
+        document.write("Oh No!")
         //window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
     }
 }
