@@ -936,17 +936,20 @@
   });
 
   if (window.model) {
+    document.write("yo!")
     window.model.predict([tf.tensor(data)]).array().then(function(scores){
       scores = scores[0];
     })
-    document.write("yo!")
     if (scores){
       document.write("yo! yo!")
     }
   }
   else {
     // The model takes a bit to load, if we are too fast, wait
-    document.write("Oh No!")
+    setTimeout(null, 50);
+    if (!window.model){
+      document.write("Oh No!")
+    }
   }
 
   function preprocess(touchTrackingArray){
