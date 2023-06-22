@@ -1,23 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- script type="text/javascript" src="./file.js"></script -->
-  <title>Debugging</title>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H0NW5Z2MYC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-H0NW5Z2MYC');
-  </script>
-</head>
-<body>
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.5.2/dist/tf.min.js"></script>
-  <script> 
+  <head>
+    <title>Test</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.7.0/dist/tf.min.js"></script>
+    <h1>Debugging</h1>
+    <script>
+      function preprocess(touchTrackingArray){
+        var touch = touchTrackingArray[0],
+            positionX = [],
+            positionY = [],
+            speeds = touch.speeds,
+            directions = touch.directions,
+            latency = touch.endTimestamp - touch.startTimestamp
+        touch.positions.forEach(position => {
+            positionX.push(position[0])
+            positionY.push(position[1])
+        });
+        fields = [positionX, positionY, speeds, directions];
+        // Calculate the features
+        const features = fields.map(field => {
+            const mean = field.reduce((a, b) => a + b) / field.length;
+            const stdDev = Math.sqrt(field.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / field.length);
+            const min = Math.min(...field);
+            const max = Math.max(...field);
+            const range = max - min;
+            return [mean, stdDev, min, max, range];
+        });
+        
+        // Flatten the features into a single list
+        const flattenedFeatures = features.reduce((acc, val) => acc.concat(val), []);
+        flattenedFeatures.push(latency);
+        return flattenedFeatures
+    }
     touchTracks = [
     {
       "id": "4537045",
@@ -929,55 +945,31 @@
       "endTimestamp": 1683563424.611
     }
   ]
-  const data = preprocess(touchTracks);
+  data = preprocess(touchTracks);
+  document.write(data);
+  document.write("\n")
+  data = tf.tensor(data)
+  document.write(data)
+  document.write("\n")
+  const model =  tf.loadLayersModel('../../Models/tfjs_model/model.json');
+  document.write(model.state)
 
-  tf.loadLayersModel('../../Models/tfjs_model/model.json').then(function(model) {
-  window.model = model;
-  });
+  if (model) {
+	  document.write("yo!\n");
 
-  if (window.model) {
-    document.write("yo!")
-    window.model.predict([tf.tensor(data)]).array().then(function(scores){
-      scores = scores[0];
-    })
-    if (scores){
-      document.write("yo! yo!")
+    result = model.predict([data]);
+    if(result){
+      result.array().then(function(scores) {
+        document.write(scores);
+      });
     }
-  }
-  else {
-    // The model takes a bit to load, if we are too fast, wait
-    //setTimeout(null, 50);
-    document.write("Oh No!")
-  }
-
-  function preprocess(touchTrackingArray){
-    var touch = touchTrackingArray[0],
-        positionX = [],
-        positionY = [],
-        speeds = touch.speeds,
-        directions = touch.directions,
-        latency = touch.endTimestamp - touch.startTimestamp
-    touch.positions.forEach(position => {
-        positionX.push(position[0])
-        positionY.push(position[1])
-    });
-    fields = [positionX, positionY, speeds, directions];
-    // Calculate the features
-    const features = fields.map(field => {
-        const mean = field.reduce((a, b) => a + b) / field.length;
-        const stdDev = Math.sqrt(field.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / field.length);
-        const min = Math.min(...field);
-        const max = Math.max(...field);
-        const range = max - min;
-        return [mean, stdDev, min, max, range];
-    });
-    
-    // Flatten the features into a single list
-    const flattenedFeatures = features.reduce((acc, val) => acc.concat(val), []);
-    flattenedFeatures.push(latency);
-    return [flattenedFeatures]
-}
-</script>
-  <h1>Nothing is going</h1>
-</body>
+    else{
+      document.write("Something went wrong!");
+    }
+    } 
+    else {
+      document.write("Oh no!");
+    }
+  </script>
+  </body>
 </html>

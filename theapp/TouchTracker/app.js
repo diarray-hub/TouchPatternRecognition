@@ -1,4 +1,4 @@
-//import * as tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 
 class TrackingSession {
     /*
@@ -52,6 +52,7 @@ class TrackingSession {
             this.records = []
         }*/
     }
+
     // Recognition
     async recognizeUser() {
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
@@ -101,18 +102,17 @@ class TrackingSession {
     
         // Create an array of touch tracking objects
         const touchTrackingsArray = Object.values(touchTrackings);
-        this.touchTracks = touchTrackingsArray;
     
         // Generate the output object
         const output = {
             name: name,
-            duration: touchTrackingsArray[0].endTimestamp - touchTrackingsArray[0].startTimestamp,
+            duration: touchTrackingsArray[0].endTimestamp - touchTrackingsArray[0].starTimestamp,
             touchTrackings: touchTrackingsArray,
             screenSize: this.screenSize,
             screenScale: this.screenScale
         };
-
-        this.recognizeUser();
+        
+        this.recognizeUser()
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
 
         function calculateSpeed(currentPosition, lastPosition, timestamp, lastimestamp) {
@@ -181,7 +181,7 @@ function preprocess(touchTrackingArray){
     // Flatten the features into a single list
     const flattenedFeatures = features.reduce((acc, val) => acc.concat(val), []);
     flattenedFeatures.push(latency);
-    return [flattenedFeatures]
+    return flattenedFeatures
 }
 
 // Defining a function that will allows us to export collected data in .json file from the browser
