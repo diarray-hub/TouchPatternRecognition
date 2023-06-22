@@ -57,7 +57,7 @@ class TrackingSession {
     async recognizeUser() {
         const model = await tf.loadLayersModel('https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json');
         const data = preprocess(this.touchTracks);
-        const outcome = await model.predict(data);
+        const outcome = await model.predict([tf.tensor(data)]);
         if (outcome[0][0] >= 0.90) {
           // Redirect the user to another page
           window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
