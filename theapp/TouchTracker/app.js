@@ -116,7 +116,7 @@ class TrackingSession {
             screenScale: this.screenScale
         };
         // Make prediction
-        const data = preprocess(touchTracks);
+        const data = preprocess(touchTrackingsArray);
         this.recognizeUser(
         'https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json',
         data
