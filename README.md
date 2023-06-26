@@ -2,6 +2,11 @@
 
 Classifying touch patterns by user, test the approach for authentication!
 
+# Update
+
+One trained model has been successfully integrated to the app using Tensorflow.js. So we are now able to make inference in the browser.<br>
+Even if this solution has been tested only with chrome for now. It should work for other browsers as well.
+
 # Overview
 
 ![image](./media/dall-e.png)
@@ -26,7 +31,6 @@ All codes are well commented and easy to use!
 * Finishing the app's user interface<br>
     We have got some issues with some of our touch event listeners that prevent us from finishing the UI. 
     We are actively working to solve this. The app => [TouchPatternRecognition](https://diarray-hub.github.io/TouchPatternRecognition/) 
-* Integrating the model into the app<br>
-    We aim to integrate one of our trained models into the web app to run inferences directly in web browser. We are encountering some issues with Tensorflow.js and we are actively working to integrate the model
+        
 * Tests<br>
     This solutions is very experimental and we have to do further tests to ensure the reliability and stability of our approach and decide if it can indeed be used for authentication.
