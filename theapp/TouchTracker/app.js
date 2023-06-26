@@ -62,13 +62,11 @@ class TrackingSession {
         const model = await tf.loadLayersModel(modelUrl);
         const tensor = tf.tensor2d(inputData, [1, 21]);
         const predictions = await model.predict(tensor);
-        console.log(
-            ('Result \n\n' + predictions.toString())
-          );
-        if (predictions[0][0] >= 0.90) {
+        const outcome = await predictions.array();
+        if (outcome[0][0] >= 0.90) {
             // Redirect the user to another page
             window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
-          } 
+        } 
         else {
             window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
         }
