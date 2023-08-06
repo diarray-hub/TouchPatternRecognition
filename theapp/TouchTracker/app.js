@@ -50,7 +50,7 @@ class TrackingSession {
                 break
         }
         //This block has been add during data collect take care to declare the endcounter attribute in order to re-use it
-        if(this.endcounter === 5){
+        if(this.endcounter === 30){
             this.export()
             this.endcounter = 0
             this.activeTouch = {}
