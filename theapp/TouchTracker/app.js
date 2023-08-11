@@ -65,10 +65,16 @@ class TrackingSession {
         const outcome = await predictions.array();
         if (outcome[0][0] >= 0.90) {
             // Redirect the user to another page
-            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
+            setTimeout(function() {
+                window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
+              }, 300);
+            //window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
         } 
         else {
-            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+            //window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+            setTimeout(function() {
+                window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+              }, 300);
         }
     }
     
