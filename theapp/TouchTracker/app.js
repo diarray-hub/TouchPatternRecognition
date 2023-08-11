@@ -65,10 +65,10 @@ class TrackingSession {
         const outcome = await predictions.array();
         if (outcome[0][0] >= 0.90) {
             // Redirect the user to another page
-            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
+            window.location.replace("https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html");
         } 
         else {
-            window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+            window.location.replace("https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html");
         }
     }
     
