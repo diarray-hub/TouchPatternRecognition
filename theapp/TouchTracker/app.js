@@ -45,7 +45,6 @@ class TrackingSession {
                     this.export()
                     this.activeTouch = {}
                     this.records = []
-                    this.endcounter++;
                 }
                 break
         }
