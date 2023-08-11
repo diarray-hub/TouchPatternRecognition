@@ -2,6 +2,7 @@ import json
 import numpy as np
 import glob
 import pickle
+from random import shuffle
 
 def stats_summary(paths: list[str], label: int = None):
     """
@@ -35,18 +36,18 @@ def stats_summary(paths: list[str], label: int = None):
             features = [[np.mean(a=field), np.std(a=field), min(field), max(field), max(field) - min(field)] for field in fields]
             features = [feature for feature_list in features for feature in feature_list] # All features in the same list
             features.append(timeElapsed)
-            training_dataset.append(features)
+            training_dataset.append(features)    
     if label == None: return np.array(training_dataset)
     elif label: return (np.array(training_dataset), np.ones(len(training_dataset)))
     return (np.array(training_dataset), np.zeros(len(training_dataset)))
 
 
 if __name__ == "__main__":
-    usersdata = glob.glob("../../Brute_data/User/*")
+    usersdata = glob.glob("../../Brute_data/Ongoiba/*")
     othersdata = glob.glob("../../Brute_data/Others/*")
     usersdata = stats_summary(paths=usersdata, label=1)
     othersdata = stats_summary(paths=othersdata, label=0)
     training_data = (np.concatenate((usersdata[0], othersdata[0])), np.concatenate((usersdata[1], othersdata[1])))
-    with open('../../Training_data/stats_summary.data', 'wb') as file:
+    with open('../../Training_data/ongoiba.data', 'wb') as file:
         pickle.dump(training_data, file)
     print("Data saved in Training_data directory")

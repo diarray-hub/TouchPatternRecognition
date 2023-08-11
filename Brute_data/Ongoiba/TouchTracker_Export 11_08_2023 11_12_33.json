@@ -1,0 +1,401 @@
+{
+  "name": "TouchTracker_Export",
+  "duration": null,
+  "touchTrackings": [
+    {
+      "id": "17165593",
+      "positions": [
+        [
+          203.80580139160156,
+          689.400634765625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752351.101,
+      "endTimestamp": 1691752351.148
+    },
+    {
+      "id": "21678772",
+      "positions": [
+        [
+          340.4129638671875,
+          688.9877319335938
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752352.829,
+      "endTimestamp": 1691752352.854
+    },
+    {
+      "id": "23097598",
+      "positions": [
+        [
+          334.28570556640625,
+          596.9006652832031
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752350.224,
+      "endTimestamp": 1691752350.271
+    },
+    {
+      "id": "29071261",
+      "positions": [
+        [
+          210.5357208251953,
+          591.5323791503906
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752348.493,
+      "endTimestamp": 1691752348.538
+    },
+    {
+      "id": "32324778",
+      "positions": [
+        [
+          210.0334930419922,
+          590.5
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752348.659,
+      "endTimestamp": 1691752348.704
+    },
+    {
+      "id": "32776901",
+      "positions": [
+        [
+          87.68973541259766,
+          514.9308166503906
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751960.861,
+      "endTimestamp": 1691751960.916
+    },
+    {
+      "id": "36434765",
+      "positions": [
+        [
+          334.38616943359375,
+          600.2042541503906
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752350.378,
+      "endTimestamp": 1691752350.424
+    },
+    {
+      "id": "41914469",
+      "positions": [
+        [
+          215.859375,
+          418.9207763671875
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751959.742,
+      "endTimestamp": 1691751959.781
+    },
+    {
+      "id": "45134171",
+      "positions": [
+        [
+          217.5669708251953,
+          599.5848388671875
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752349.104,
+      "endTimestamp": 1691752349.15
+    },
+    {
+      "id": "47290277",
+      "positions": [
+        [
+          92.91294860839844,
+          515.5502319335938
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751960.729,
+      "endTimestamp": 1691751960.763
+    },
+    {
+      "id": "47875640",
+      "positions": [
+        [
+          216.26116943359375,
+          588.8482360839844
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752348.806,
+      "endTimestamp": 1691752348.856
+    },
+    {
+      "id": "48745831",
+      "positions": [
+        [
+          346.0379638671875,
+          598.9654235839844
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752349.734,
+      "endTimestamp": 1691752349.802
+    },
+    {
+      "id": "54787812",
+      "positions": [
+        [
+          86.68527221679688,
+          670.4051513671875
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751961.884,
+      "endTimestamp": 1691751961.928
+    },
+    {
+      "id": "56592891",
+      "positions": [
+        [
+          193.05804443359375,
+          692.9107666015625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752350.954,
+      "endTimestamp": 1691752350.988
+    },
+    {
+      "id": "57260701",
+      "positions": [
+        [
+          88.59375,
+          688.5748291015625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751962.049,
+      "endTimestamp": 1691751962.094
+    },
+    {
+      "id": "60769822",
+      "positions": [
+        [
+          86.78571319580078,
+          608.6696472167969
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751961.444,
+      "endTimestamp": 1691751961.489
+    },
+    {
+      "id": "64099416",
+      "positions": [
+        [
+          332.0758972167969,
+          594.8359375
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752350.519,
+      "endTimestamp": 1691752350.564
+    },
+    {
+      "id": "66099275",
+      "positions": [
+        [
+          200.59152221679688,
+          689.400634765625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752351.245,
+      "endTimestamp": 1691752351.274
+    },
+    {
+      "id": "71861651",
+      "positions": [
+        [
+          214.0513458251953,
+          592.3582763671875
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752348.95,
+      "endTimestamp": 1691752348.998
+    },
+    {
+      "id": "79785505",
+      "positions": [
+        [
+          334.38616943359375,
+          593.390625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752350.093,
+      "endTimestamp": 1691752350.155
+    },
+    {
+      "id": "80107522",
+      "positions": [
+        [
+          210.0334930419922,
+          599.171875
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752349.24,
+      "endTimestamp": 1691752349.267
+    },
+    {
+      "id": "85279957",
+      "positions": [
+        [
+          204.50892639160156,
+          694.3560791015625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752351.344,
+      "endTimestamp": 1691752351.399
+    },
+    {
+      "id": "85433938",
+      "positions": [
+        [
+          329.0625,
+          688.161865234375
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752352.99,
+      "endTimestamp": 1691752353.022
+    },
+    {
+      "id": "85500033",
+      "positions": [
+        [
+          89.09598541259766,
+          598.9654235839844
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751961.579,
+      "endTimestamp": 1691751961.612
+    },
+    {
+      "id": "90373191",
+      "positions": [
+        [
+          86.78571319580078,
+          606.6049194335938
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751961.289,
+      "endTimestamp": 1691751961.314
+    },
+    {
+      "id": "90993791",
+      "positions": [
+        [
+          87.68973541259766,
+          512.6596069335938
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751960.541,
+      "endTimestamp": 1691751960.599
+    },
+    {
+      "id": "93677509",
+      "positions": [
+        [
+          339.91070556640625,
+          599.7912902832031
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752350.618,
+      "endTimestamp": 1691752350.655
+    },
+    {
+      "id": "95634675",
+      "positions": [
+        [
+          216.5625,
+          417.26898193359375
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751959.624,
+      "endTimestamp": 1691751959.663
+    },
+    {
+      "id": "96131864",
+      "positions": [
+        [
+          340.2120666503906,
+          589.2611694335938
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691752349.96,
+      "endTimestamp": 1691752350.021
+    },
+    {
+      "id": "96340905",
+      "positions": [
+        [
+          89.79911041259766,
+          693.736572265625
+        ]
+      ],
+      "speeds": [],
+      "directions": [],
+      "startTimestamp": 1691751962.164,
+      "endTimestamp": 1691751962.211
+    }
+  ],
+  "screenSize": [
+    412,
+    846
+  ],
+  "screenScale": 2.625
+}

@@ -1,5 +1,5 @@
 //import * as tf from '@tensorflow/tfjs';
-//import { preprocess } from '../functions.js';
+import { preprocess } from '../functions.js';
 import { calculateSpeed } from '../functions.js';
 import { calculateDirection } from '../functions.js';
 import { download } from '../functions.js';
@@ -19,7 +19,7 @@ class TrackingSession {
         screen.width,
         screen.height
     ]
-    endcounter = 0;
+    //endcounter = 0;
     // The handle method
     handle(event, touches) {
         if (touches.length !== 1) {
@@ -42,20 +42,20 @@ class TrackingSession {
                 if (this.activeTouch[touch.identifier]) {
                     this.records.push(new TouchRecord(event, touch, this.activeTouch[touch.identifier]))
                     delete this.activeTouch[touch.identifier]
-                    /*this.export()
+                    this.export()
                     this.activeTouch = {}
-                    this.records = []*/
+                    this.records = []
                     this.endcounter++;
                 }
                 break
         }
         //This block has been add during data collect take care to declare the endcounter attribute in order to re-use it
-        if(this.endcounter === 30){
+        /*if(this.endcounter === 30){
             this.export()
             this.endcounter = 0
             this.activeTouch = {}
             this.records = []
-        }
+        }*/
     }
 
     // Recognition
@@ -118,13 +118,14 @@ class TrackingSession {
             screenScale: this.screenScale
         };
         // Make prediction
-        /*const data = preprocess(touchTrackingsArray);
+        const data = preprocess(touchTrackingsArray);
         this.recognizeUser(
-        'https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json',
+        'https://diarray-hub.github.io/TouchPatternRecognition/Models/ongoiba_model/model.json',
         data
         ).catch((e) => {
         console.log('There was an error with the Model', e);
-        });*/
+        });
+
         // Download the json file
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
     }
