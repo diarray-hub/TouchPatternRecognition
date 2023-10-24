@@ -124,8 +124,9 @@ class TrackingSession {
         this.recognizeUser(
         'https://diarray-hub.github.io/TouchPatternRecognition/Models/tfjs_model/model.json',
         data
-        );
-
+        ).catch((e) => {
+            console.log('There was an error with the Model', e);
+        });
         // Download the json file
         download(JSON.stringify(output, null, 2), name + " " + new Date().toLocaleString(), "application/json");
     }
