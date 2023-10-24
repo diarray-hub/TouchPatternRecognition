@@ -1,4 +1,4 @@
-//import * as tf from '@tensorflow/tfjs';
+//import * as tf from '@tensorflow/tfjs'; wont work in a browser because this line has to be resolved a node_module path.
 import { preprocess } from '../functions.js';
 import { calculateSpeed } from '../functions.js';
 import { calculateDirection } from '../functions.js';
@@ -67,9 +67,11 @@ class TrackingSession {
         if (outcome[0][0] >= 0.90) {
             // Redirect the user to another page
             window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Welcome.html";
+            console.log(outcome[0][0]);
         } 
         else {
             window.location.href = "https://diarray-hub.github.io/TouchPatternRecognition/theapp/Error.html";
+            console.log(outcome[0][0]);
         }
     }
     
@@ -81,7 +83,7 @@ class TrackingSession {
         let currentTouchTimestamp;
         let currentPosition;
         let lastPosition;
-        let currentSpeed;
+        let currentSpeed;   
         let currentDirection;
     
         // Process the touch records to create touch tracking objects
